@@ -1,9 +1,7 @@
 package com.mainPackage.database;
 
 import javax.annotation.PostConstruct;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 /**
  * Created by claudiu on 02.04.2017.
@@ -24,6 +22,20 @@ public class ConnectionToDB {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             conn = DriverManager.getConnection(URL, info);
+
+            Statement stmt = conn.createStatement();
+            String query="SELECT * FROM Users";
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next())
+            {
+                System.out.print(rs.getString("PersonID") +" ");
+                System.out.print(rs.getString(2) +" ");
+                System.out.print(rs.getString(3) +" ");
+
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
         } catch (SQLException e) {
             System.out.println("Error: " + e);
         } catch (IllegalAccessException e) {
