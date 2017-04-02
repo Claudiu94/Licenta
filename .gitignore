@@ -1,7 +1,7 @@
 .git/
 realTimeMarketsAnalyzer/target/
 realTimeMarketsAnalyzer/.idea
-realTimeMarketsAnalyzer/SpringExamples.iml
+realTimeMarketsAnalyzer/realTimeMarketsAnalyzer.iml
 SpringExamples/target/
 SpringExamples/.idea
 SpringExamples/SpringExamples.iml

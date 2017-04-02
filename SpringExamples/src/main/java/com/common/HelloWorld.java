@@ -1,4 +1,4 @@
-package com.mkyong.common;
+package com.common;
 
 /**
  * Created by cozafiu on 08.03.2017.
