@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -19,6 +21,11 @@ public class GreetingController {
     public Greetings greeting(@RequestParam(value="name", defaultValue="World") String name) {
         return new Greetings(counter.incrementAndGet(),
                 String.format(template, name));
+    }
+
+    @RequestMapping("/stocks")
+    public StocksBrief symbols() throws IOException {
+        return new StocksBrief();
     }
 }
 
