@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class AppControler {
 
-    @RequestMapping(value = "/")
+    @RequestMapping(value = "/home")
     public String home() {
-        return "test";
+        return "home";
     }
 }
