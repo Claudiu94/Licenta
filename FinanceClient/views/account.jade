@@ -9,7 +9,7 @@ html
   body
     .login-page(name='first_div')
       .form(name='second_div')
-        form.register-form(name='register-from', method='POST', action='/account')
+        form.register-form(name='register-from', method='POST', action='http://localhost:8080/new-account')
           input(type='text', name='name')
           input(type='password', name='password')
           input(type='text', name='email address')
@@ -17,7 +17,7 @@ html
           p.message
             | Already registered? 
             a(href='#') Sign In
-        form.login-form(name='login-from', method='post', action='/account')
+        form.login-form(name='login-from', method='POST', action='http://localhost:8080/login')
           input(type='text', name='username')
           input(type='password', name='password')
           button login
