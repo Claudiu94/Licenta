@@ -22,7 +22,12 @@ public class ConnectionDBTest {
 
     @Test
     public void test() {
-        connectionToDB.getConnection();
+        connectionToDB.testConnection();
+    }
+
+    @Test
+    public void testNextId() {
+        System.out.println(connectionToDB.getNextId());
     }
 
 }

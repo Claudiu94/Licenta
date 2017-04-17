@@ -17,11 +17,12 @@ public class StocksBrief
     public StocksBrief() throws IOException {
         for (String sym : symbolsList) {
             Stock stock = YahooFinance.get(sym);
-
+            stock.getCurrency();
+            
             symbols.add(new Symbol(sym, stock.getName(), stock.getQuote().getPrice().floatValue()));
         }
     }
-    
+
     public ArrayList<Symbol> getSymbols() {
         return symbols;
     }

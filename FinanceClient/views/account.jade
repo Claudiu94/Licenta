@@ -6,21 +6,53 @@ html
     script(src='http://code.jquery.com/jquery-1.11.0.min.js')
     script(type='application/javascript', src='/javascripts/account.js')
     link(rel='stylesheet', href='/stylesheets/account.css', media='screen', type='text/css')
+    link(rel='stylesheet', href='/stylesheets/style-home.css', type='text/css')
   body
-    .login-page(name='first_div')
-      .form(name='second_div')
-        form.register-form(name='register-from', method='POST', action='http://localhost:8080/new-account')
-          input(type='text', name='name')
-          input(type='password', name='password')
-          input(type='text', name='email address')
-          button create
-          p.message
-            | Already registered? 
-            a(href='#') Sign In
-        form.login-form(name='login-from', method='POST', action='http://localhost:8080/login')
-          input(type='text', name='username')
-          input(type='password', name='password')
-          button login
-          p.message
-            | Not registered? 
-            a(href='#') Create an account
+
+  section#body.width
+      aside#sidebar.column-left
+        header
+          h1
+            a(href='#') Finance Analyzer
+          - if (typeof session.username !== 'undefined')  
+            h2 Welcome to my website,  #{session.username}!
+          - else
+            h2 Welcome to my website!
+        nav#mainnav
+          ul
+            li.selected-item
+              a(href='/home') Home
+            li
+              a(href='#') Portofolio
+            li
+              a(href='account') Sign In/New Account
+            li
+              a(href='details') Apple Test
+            li
+              a(href='#') News
+            li
+              a(href='#') Contact
+    - if (typeof session.username !== 'undefined')
+      .login-page(name='first_div')
+        .form(name='second_div')
+          p You are logged in
+    -else
+      .login-page(name='first_div')
+        .form(name='second_div')
+          form.register-form(name='register-from', method='POST', action='http://localhost:8080/new-account')
+            input(type='text', name='first_name', placeholder='first name')
+            input(type='text', name='last_name', placeholder='last name')
+            input(type='text', name='username', placeholder='username')
+            input(type='password', name='password',  placeholder='password')
+            input(type='text', name='email_address', placeholder='email address')
+            button create
+            p.message
+              | Already registered? 
+              a(href='#') Sign In
+          form.login-form(name='login-from', method='POST', action='http://localhost:8080/login')
+            input(type='text', name='username', placeholder='username')
+            input(type='password', name='password', placeholder='password')
+            button login
+            p.message
+              | Not registered? 
+              a(href='#') Create an account

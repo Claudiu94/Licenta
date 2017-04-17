@@ -1,0 +1,10 @@
+﻿Real time finance analyzer
+
+
+1 Introducere
+
+Aplicatia dezvoltata in cadrul proiectului de licenta urmareste sa ofere utilizatorilor date despre pietele finaciare ale lumii, cum ar fi: curs valutar, stiri din domaniul finance(ce companii au aparut, schimbari majore in piata – scaderi, cresteri cu un impact puternic), actiuni la bursa(cat costa o actiune pentru o anumota companie listata la bursa).
+
+Ca si aplicatii existente la acest moment, amintim, ca si cea mai imoportanta, si care, reprezinta si sursa principala de date a aceste aplicatii prin faptul ca yahoo pune la dispozitie pentru cei interesati o interfata pentru a oferi date din domeniul financiar. Yahoo Finance ofera o perspectiva larga in acest domeniu oferind informatii despre multi[le piete financiare di lume, indicatori tehnici si financiari pentru actiunile listate la bursa. Toate sunt prezentate intr-o interfata grafica interactiva, care iti permit, printre altele, sa observi istoricul unei companii listate la bursa(evolutia pretului actiunilor acelei companii), sa-ti setezi alarme care sa te informeze cand un indicator pe care il consideri relevant are o schimbare cu un anumit numar de puncte procentuale(setate in aplicatie tot de utilizator).
+
+Proiectul meu va avea in vedere sa ofere utilizatorilor informatii asemanatoare cu cele oferite de Yahoo Finance, printre care se numaraL stiri din domeniul financiar, date despre companii listate  la bursa, evolutie curs valutar, evolutia pretului aurului, petrolului, alerte primite pe email si in aplicatie de catre utilizator atunci cand intervine o schimbare, posibilitatea de creare a unui portofoliu care sa contina actiunile(la bursa) ale utilizatorului.
