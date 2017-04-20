@@ -2,18 +2,17 @@ link(rel='stylesheet', href='/stylesheets/navigation.css', type='text/css')
 script(type='application/javascript', src='/javascripts/navigation.js')
 - local_data = JSON.stringify(session)
 		input(type='hidden', value=local_data)#myLocalDataObj
-		nav
-			ul(style='display: inline-block; vertical-align: middle; margin: 0px;')
-				li(style='display: inline-block; margin-right: 10px')
-					a#account.nav-link(href='account')
-						| Sign In 
-				li(style='display: inline-block; margin-right: 10px')
-					a.nav-link(href='') Link
 		section#body.width
+			.navbar
+				- if (typeof session.username !== 'undefined')
+					a(href='') #{session.username}
+				- else
+					a(href='account') Sing In
+				a(href='') Another link
 			aside#sidebar.column-left
 				header
 					h1
-						a(href='#')
+						a(href='')
 							span(style='font-size: 63px; display: block;') Finance
 							| Analyzer
 					- if (typeof session.username !== 'undefined')  

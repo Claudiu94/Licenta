@@ -1,0 +1,38 @@
+link(rel='stylesheet', href='/stylesheets/table.css', type='text/css')
+script(type='application/javascript', src='/javascripts/table.js')
+
+.form-group.pull-right
+  input.search.form-control(type='text', placeholder='What you looking for?')
+span.counter.pull-right
+table.table.table-hover.table-bordered.results
+  thead
+    tr
+      th Symbol
+      th.col-md-5.col-xs-5 Company Name
+      th.col-md-4.col-xs-4 Price
+      th.col-md-3.col-xs-3 Currency
+    tr.warning.no-result
+      td(colspan='4')
+        i.fa.fa-warning
+        |  No result
+  tbody
+    tr
+      th(scope='row') 1
+      td Vatanay Özbeyli
+      td UI & UX
+      td Istanbul
+    tr
+      th(scope='row') 2
+      td Burak Özkan
+      td Software Developer
+      td Istanbul
+    tr
+      th(scope='row') 3
+      td Egemen Özbeyli
+      td Purchasing
+      td Kocaeli
+    tr
+      th(scope='row') 4
+      td Engin Kızıl
+      td Sales
+      td Bozuyük
