@@ -1,6 +1,5 @@
 $(document).ready(function(){
 	var localObj = JSON.parse($("#myLocalDataObj").val());
-	console.log(localObj);
 
 	Highcharts.chart('container', {
 

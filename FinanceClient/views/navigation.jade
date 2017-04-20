@@ -1,0 +1,27 @@
+link(rel='stylesheet', href='/stylesheets/navigation.css', type='text/css')
+script(type='application/javascript', src='/javascripts/navigation.js')
+- local_data = JSON.stringify(session)
+		input(type='hidden', value=local_data)#myLocalDataObj
+		section#body.width
+			aside#sidebar.column-left
+				header
+					h1
+						a(href='#') Finance Analyzer
+					- if (typeof session.username !== 'undefined')  
+						h2 Welcome to my website,  #{session.username}!
+					- else
+						h2 Welcome to my website!
+				nav#mainnav
+					ul
+						li#home.selected-item
+							a(href='/home') Home
+						li#portofolio
+							a(href='#') Portofolio
+						li#account
+							a(href='account') Sign In/New Account
+						li#details
+							a(href='details') Apple Test
+						li
+							a(href='#') News
+						li
+							a(href='#') Contact

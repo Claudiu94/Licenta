@@ -1,39 +1,13 @@
 doctype html
 html
 	head
-		meta(http-equiv='Content-Type', content='text/html; charset=iso-8859-1')
 		title Real Time Finance Analyzer
 		meta(name='viewport', content='width=device-width, minimum-scale=1.0, maximum-scale=1.0')
-		link(rel='stylesheet', href='/stylesheets/style-home.css', type='text/css')
+		script(src='https://code.jquery.com/jquery-3.1.1.min.js')
 		script(src='http://code.highcharts.com/highcharts.js')
 		script(src='https://code.highcharts.com/modules/exporting.js')
-		script(src='https://code.jquery.com/jquery-3.1.1.min.js')
 		script(type='application/javascript', src='/javascripts/home.js')
 	body
-		- local_data = JSON.stringify(session)
-		input(type='hidden', value=local_data)#myLocalDataObj
-		section#body.width
-			aside#sidebar.column-left
-				header
-					h1
-						a(href='#') Finance Analyzer
-					- if (typeof session.username !== 'undefined')  
-						h2 Welcome to my website,  #{session.username}!
-					- else
-						h2 Welcome to my website!
-				nav#mainnav
-					ul
-						li.selected-item
-							a(href='/home') Home
-						li
-							a(href='#') Portofolio
-						li
-							a(href='account') Sign In/New Account
-						li
-							a(href='details') Apple Test
-						li
-							a(href='#') News
-						li
-							a(href='#') Contact
+		include navigation
 		section#content
 			#container

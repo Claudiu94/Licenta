@@ -1,37 +1,13 @@
 doctype html
 html
   head
+    title Real Time Finance Analyzer
     meta(charset='UTF-8')
-    title Register/Log-in
-    script(src='http://code.jquery.com/jquery-1.11.0.min.js')
+    script(src='https://code.jquery.com/jquery-3.1.1.min.js')
     script(type='application/javascript', src='/javascripts/account.js')
     link(rel='stylesheet', href='/stylesheets/account.css', media='screen', type='text/css')
-    link(rel='stylesheet', href='/stylesheets/style-home.css', type='text/css')
   body
-
-  section#body.width
-      aside#sidebar.column-left
-        header
-          h1
-            a(href='#') Finance Analyzer
-          - if (typeof session.username !== 'undefined')  
-            h2 Welcome to my website,  #{session.username}!
-          - else
-            h2 Welcome to my website!
-        nav#mainnav
-          ul
-            li.selected-item
-              a(href='/home') Home
-            li
-              a(href='#') Portofolio
-            li
-              a(href='account') Sign In/New Account
-            li
-              a(href='details') Apple Test
-            li
-              a(href='#') News
-            li
-              a(href='#') Contact
+    include navigation
     - if (typeof session.username !== 'undefined')
       .login-page(name='first_div')
         .form(name='second_div')
