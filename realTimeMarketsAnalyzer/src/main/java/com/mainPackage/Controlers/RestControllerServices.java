@@ -2,6 +2,7 @@ package com.mainPackage.Controlers;
 
 import com.mainPackage.database.ConnectionToDB;
 import com.mainPackage.util.Greetings;
+import com.mainPackage.util.JsonParser;
 import com.mainPackage.util.StocksBrief;
 import com.mainPackage.util.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class RestControllerServices {
   @Autowired
   ConnectionToDB connectionToDB;
 
+  @Autowired
+  JsonParser jsonParser;
+
   private String url = ":/localhost:3000/";
   private static final String template = "Hello, %s!";
   private final AtomicLong counter = new AtomicLong();
@@ -29,13 +33,14 @@ public class RestControllerServices {
   @RequestMapping("/greeting")
   public Greetings greeting(@RequestParam(value="name", defaultValue="World") String name) {
     System.out.println("here!!!");
+//    jsonParser.getSymbols();
     return new Greetings(counter.incrementAndGet(),
             String.format(template, name));
   }
 
   @RequestMapping("/stocks")
   public StocksBrief symbols() throws IOException {
-    return new StocksBrief();
+    return new StocksBrief(jsonParser.getSymbols());
   }
 
   @RequestMapping(value = "/login", method = RequestMethod.POST)

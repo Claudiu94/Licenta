@@ -29,5 +29,4 @@ public class ConnectionDBTest {
     public void testNextId() {
         System.out.println(connectionToDB.getNextId());
     }
-
 }

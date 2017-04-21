@@ -8,4 +8,7 @@
 
     <bean id = "dbConnection" class = "com.mainPackage.database.ConnectionToDB">
     </bean>
+
+    <bean id = "jsonParser" class = "com.mainPackage.util.JsonParser">
+    </bean>
 </beans>

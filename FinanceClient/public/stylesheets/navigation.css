@@ -286,10 +286,6 @@ nav#mainnav li a {
   font-size: 17px;
 }
 
-.navbar a:first-of-type {
-	margin-right: 40px;
-}
-
 @media screen and (max-width: 740px) {
 
 	body { font-size: 0.9em; }	
@@ -301,13 +297,11 @@ nav#mainnav li a {
 
 	header h1, header h2, nav#mainnav li a { text-align:center; }
 	
-	section#content, aside#sidebar { position: relative; float: none; width: auto; margin-left: 0; }
+	section#content, aside#sidebar { position: relative; float: none; width: auto; margin-left: 0; margin-top: 30px;}
 
 	.login-page {
 	  padding: 8% 20px 0 20px;
 	}
-
-	
 }
 
 
@@ -319,6 +313,4 @@ nav#mainnav li a {
 
 
 	nav#mainnav ul li a { margin-top: 0; padding: 1em; }
-
-
 }
