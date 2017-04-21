@@ -15,3 +15,7 @@
 .form-group {
 	margin-top: 60px;
 }
+
+tr:hover {
+	background-color: #fafafa;
+}
