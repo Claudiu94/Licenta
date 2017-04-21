@@ -16,23 +16,9 @@ table.table.table-hover.table-bordered.results
         i.fa.fa-warning
         |  No result
   tbody
-    tr
-      th(scope='row') 1
-      td Vatanay Özbeyli
-      td UI & UX
-      td Istanbul
-    tr
-      th(scope='row') 2
-      td Burak Özkan
-      td Software Developer
-      td Istanbul
-    tr
-      th(scope='row') 3
-      td Egemen Özbeyli
-      td Purchasing
-      td Kocaeli
-    tr
-      th(scope='row') 4
-      td Engin Kızıl
-      td Sales
-      td Bozuyük
+    each item in companies
+      tr
+        th(scope='row') #{item.symbol}
+        td #{item.companyName}
+        td #{item.price}
+        td #{item.currency}
