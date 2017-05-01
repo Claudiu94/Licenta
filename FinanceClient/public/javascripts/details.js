@@ -1,32 +1,134 @@
+var seriesOptions = [];
+var url = window.location.href;
+var sym = getParameterByName("symbol", url);
+var name = getParameterByName("name", url);
+var dataUrl = "http://localhost:8080/history?symbol=";
+var seriesCounter = 0;
+var symbols = [sym];
 
-$(document).ready(function(){
+$(document).ready(function() {
     var localObj = JSON.parse($("#myLocalDataObj").val());
-    console.log(localObj);
-    $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
-    // Create the chart
-    Highcharts.stockChart('container', {
+    
+    if (sym == null) {
+        symbols = ["AAPL"];
+        name = "Apple Inc.";
+    }
+    // $.getJSON(dataUrl, function (data) {
+    //     // Create the chart
+    //     Highcharts.stockChart('container', {
 
+
+    //         rangeSelector: {
+    //             selected: 1
+    //         },
+
+    //         title: {
+    //             text: name + ' Stock Price'
+    //         },
+
+    //         series: [{
+    //             name: sym + ' Stock Price',
+    //             data: data,
+    //             marker: {
+    //                 enabled: true,
+    //                 radius: 3
+    //             },
+    //             shadow: true,
+    //             tooltip: {
+    //                 valueDecimals: 2
+    //             }
+    //         }]
+    //     });
+    // });
+    plot();
+});
+
+function plot() {
+    $.each(symbols, function (i, sym) {
+        $.getJSON(dataUrl + sym, function (data) {
+
+            seriesOptions[i] = {
+                name: sym,
+                data: data,
+                marker: {
+                    enabled: true,
+                    radius: 3
+                },
+                shadow: true,
+                tooltip: {
+                    valueDecimals: 2,
+                    style: {fontSize: '11pt'}
+                }
+            };
+
+            // As we're loading the data asynchronously, we don't know what order it will arrive. So
+            // we keep a counter and create the chart when all the data is loaded.
+            seriesCounter += 1;
+
+            if (seriesCounter === symbols.length) {
+                createChart();
+            }
+        });
+    });
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function createChart() {
+
+    var chart = Highcharts.stockChart('container', {
 
         rangeSelector: {
-            selected: 1
+            selected: 4
         },
 
         title: {
-            text: 'AAPL Stock Price'
+            text: name + ' Stock Price'
         },
 
-        series: [{
-            name: 'AAPL Stock Price',
-            data: data,
-            marker: {
-                enabled: true,
-                radius: 3
-            },
-            shadow: true,
-            tooltip: {
-                valueDecimals: 2
+        xAxis: {
+            labels: {
+                style: {fontSize: '11pt'}
             }
-        }]
+        },
+
+        yAxis: {
+            labels: {
+                formatter: function () {
+                    return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                }
+            },
+            plotLines: [{
+                value: 0,
+                width: 2,
+                color: 'silver'
+            }]
+        },
+
+        plotOptions: {
+            series: {
+                compare: 'percent',
+                showInNavigator: true
+            }
+        },
+
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+            valueDecimals: 2,
+            split: true,
+            style: {fontSize: '11pt'}
+        },
+
+        series: seriesOptions
     });
-});
-});
+}
+
+// https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?

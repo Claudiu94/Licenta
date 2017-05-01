@@ -7,7 +7,9 @@ body {
 	font-family: "Source Sans Pro","sans-serif";
 	font-size: 1.0em;
 	color:#666;
+ 	background: #edf0f3; 
 }
+
 * {
 	margin:0;
 	padding:0;
@@ -104,8 +106,9 @@ fieldset form input, fieldset form select, fieldset form textarea {
 	font-family: "Source Sans Pro","sans-serif";
 	border:1px solid #ddd;
 }
+
 fieldset form input.formbutton {
-border:none;
+	border:none;
     background-color: #80B763;
     border-radius: 5px;
     color: #FFFFFF;
@@ -192,7 +195,6 @@ section#body {
 section#content {
 	margin-left: 250px;
 	padding: 20px;
-	background-color: #fff;
 	margin-top: 100px;
 }
 .column-left {
@@ -262,9 +264,10 @@ nav#mainnav li a {
 
 #container {
 	min-width: 310px;
-	max-width: 800px;
-	height: 400px;
-	margin: 0 auto
+	max-width: 1000px;
+	height: 600px;
+	margin: 0 auto;
+	background-color: #fff;
 }
 
 .navbar {

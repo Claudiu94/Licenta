@@ -7,18 +7,19 @@ span.counter.pull-right
 table.table.table-hover.table-bordered.results
   thead
     tr
-      th Symbol
-      th.col-md-5.col-xs-5 Company Name
-      th.col-md-4.col-xs-4 Price
-      th.col-md-3.col-xs-3 Currency
+      th.sym Symbol
+      th.col-md-5 Company Name
+      th.col-md-4 Price
+      th.col-md-3 Currency
     tr.warning.no-result
       td(colspan='4')
         i.fa.fa-warning
         |  No result
   tbody
-    each item in companies
-      tr
-        th(scope='row') #{item.symbol}
-        td #{item.companyName}
-        td #{item.price}
-        td #{item.currency}
+    - if (typeof companies !== 'undefined')
+      each item in companies
+        tr.table-row(id="#{item.symbol}")
+          th(scope='row') #{item.symbol}
+          td #{item.companyName}
+          td #{item.price}
+          td #{item.currency}

@@ -5,13 +5,22 @@ import com.mainPackage.util.Greetings;
 import com.mainPackage.util.JsonParser;
 import com.mainPackage.util.StocksBrief;
 import com.mainPackage.util.User;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+import yahoofinance.Stock;
+import yahoofinance.YahooFinance;
+import yahoofinance.histquotes.HistoricalQuote;
+import yahoofinance.histquotes.Interval;
 
+import javax.enterprise.inject.Produces;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -30,7 +39,11 @@ public class RestControllerServices {
   private static final String template = "Hello, %s!";
   private final AtomicLong counter = new AtomicLong();
 
-  @RequestMapping("/greeting")
+
+
+  @RequestMapping(value = "/greeting", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+  @ResponseBody
+  @CrossOrigin(origins = "http://localhost:3000")
   public Greetings greeting(@RequestParam(value="name", defaultValue="World") String name) {
     System.out.println("here!!!");
 //    jsonParser.getSymbols();
@@ -38,7 +51,35 @@ public class RestControllerServices {
             String.format(template, name));
   }
 
-  @RequestMapping("/stocks")
+  @RequestMapping(value = "/history", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+  @ResponseBody
+  @CrossOrigin(origins = "http://localhost:3000")
+  public String getHistory(@RequestParam(value="symbol", required=false) String symbol) throws IOException {
+    System.out.println("History symbol: " + symbol);
+
+    if (symbol == null)
+      symbol = "AAPL";
+
+    Calendar from = Calendar.getInstance();
+    from.add(Calendar.YEAR, -2);
+    Stock appl = YahooFinance.get(symbol, from, Interval.DAILY);
+    JSONArray list = new JSONArray();
+
+    for (HistoricalQuote quote : appl.getHistory()) {
+      JSONArray l = new JSONArray();
+//      System.out.println(quote.getDate().toInstant().getEpochSecond() * 1000);
+      l.add(quote.getDate().toInstant().getEpochSecond() * 1000);
+      l.add(quote.getClose().floatValue());
+      list.add(l);
+    }
+    Collections.reverse(list);
+
+    return list.toJSONString();
+  }
+
+  @RequestMapping(value = "/stocks", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+  @CrossOrigin(origins = "http://localhost:3000")
+  @ResponseBody
   public StocksBrief symbols() throws IOException {
     return new StocksBrief(jsonParser.getSymbols());
   }
@@ -96,5 +137,17 @@ public class RestControllerServices {
     return redirectView;
   }
 
+  @RequestMapping(value = "/portofolio", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+  @ResponseBody
+  @CrossOrigin(origins = "http://localhost:3000")
+  public String portofolio(@RequestParam(value="name", defaultValue="Claudiu_94") String user) {
+    int userId = connectionToDB.getId(user);
+    List<Map<String, Object>> data = connectionToDB.getShares(userId);
+
+    for (Map<String, Object> map : data) {
+      
+    }
+    return null;
+  }
 
 }

@@ -20,15 +20,13 @@ router.get('/', function(req, res, next) {
 router.get('/home', function(req, res, next) {
 	console.log("In /home");
 	request('http://localhost:8080/stocks', function (error, response, body) {
-    	if (!error && response.statusCode == 200) {
-    		var data = JSON.parse(body);
-    		console.log(data)
-       	 	console.log(data.companies) // Print the google web page.
-        	res.render('home', {'session': req.session, 'companies': data.companies});
-     	}
-     	else {
-     		res.render('home', {'session': req.session});
-     	}
+		if (!error && response.statusCode == 200) {
+			var data = JSON.parse(body);
+			res.render('home', {'session': req.session, 'companies': data.companies});
+		}
+		else {
+			res.render('home', {'session': req.session});
+		}
 	})
 });
 
@@ -39,6 +37,11 @@ router.get('/account', function(req, res, next) {
 router.get('/details', function(req, res, next) {
 	res.render('details', {'session': req.session})
 });
+
+router.get('/portofolio', function(req, res, next) {
+	res.render('portofolio', {'session': req.session})
+});
+
 
 router.post('/account', function(req, res, next) {
 	console.log(Object.keys(req.body).length)

@@ -18,6 +18,7 @@ public class StocksBrief {
 
   public StocksBrief(ArrayList<String> symList) throws IOException {
     String [] array = symList.toArray(new String [symList.size()]);
+//    System.out.println(array);
     Map<String, Stock> stocksMap = YahooFinance.get(array);
 
     for (Map.Entry<String, Stock> entry : stocksMap.entrySet()) {

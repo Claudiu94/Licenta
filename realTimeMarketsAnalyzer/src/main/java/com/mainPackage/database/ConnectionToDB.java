@@ -50,6 +50,10 @@ public class ConnectionToDB {
 
     private static final String getRowData = "select * from Users where Username=";
 
+    private static final String getRowId = "select PersonID from Users where Username=";
+
+    private static final String getRows = "select Symbol, Name, Shares from Shares where PersonID=";
+
     public void testConnection() {
         JdbcTemplate template = new JdbcTemplate(getDataSource());
 
@@ -99,6 +103,30 @@ public class ConnectionToDB {
                     row.get(EMAIL), row.get(USERNAME), row.get(PASSWORD));
         }
         return null;
+    }
+
+    public int getId(String userName) {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        String sqlQuery = new StringBuilder().append(getRowId)
+                .append("\"" + userName + "\"").toString();
+
+        List<Map<String, Object>> rows = template.queryForList(sqlQuery);
+
+        if (rows.size() == 1) {
+            Map<String, Object> row = rows.get(0);
+
+            return (Integer)row.get(ID);
+        }
+        return -1;
+    }
+
+    public List<Map<String, Object>> getShares(int userId) {
+
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        String sqlQuery = new StringBuilder().append(getRows)
+                .append("\"" + userId + "\"").toString();
+
+        return template.queryForList(sqlQuery);
     }
 
     public static DriverManagerDataSource getDataSource() {

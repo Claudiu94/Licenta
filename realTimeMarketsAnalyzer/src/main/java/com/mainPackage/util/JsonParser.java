@@ -17,7 +17,7 @@ import org.json.simple.parser.ParseException;
 
 public class JsonParser {
 
-    private static final String filePath = "/home/cozafiu/workspace/Licenta/realTimeMarketsAnalyzer/Stock.json";
+    private static final String filePath = "/home/claudiu/workspace/Licenta/realTimeMarketsAnalyzer/Stock.json";
 
     public ArrayList<String> getSymbols() {
 

@@ -1,10 +1,10 @@
 .results tr[visible='false'],
 .no-result{
-  display:none;
+  display: none;
 }
 
 .results tr[visible='true']{
-  display:table-row;
+  display: table-row;
 }
 
 .counter{
@@ -17,5 +17,32 @@
 }
 
 tr:hover {
-	background-color: #fafafa;
+	background-color: #edf0f3;
+}
+
+table tbody, table thead
+{
+    display: -moz-stack;
+    width: 100%;
+}
+
+table {
+	background-color: #fff;
+}
+
+tbody {
+ 	height: 400px;
+	overflow: auto;
+}
+
+.col-md-5 {
+	width: 59%;
+}
+
+.sym {
+	width: 16%;
+}
+
+.col-md-4 {
+	width: 13%;
 }
