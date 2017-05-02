@@ -15,13 +15,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.annotation.PostConstruct;
+
 public class JsonParser {
 
     private static final String filePath = "/home/claudiu/workspace/Licenta/realTimeMarketsAnalyzer/Stock.json";
+    private ArrayList<String> symbolys;
 
-    public ArrayList<String> getSymbols() {
-
-        ArrayList<String> symbolys = new ArrayList<String>();
+    @PostConstruct
+    public void init() {
+        symbolys = new ArrayList<String>();
 
         try {
             // read the json file
@@ -43,6 +46,9 @@ public class JsonParser {
         } catch (NullPointerException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public ArrayList<String> getSymbolys() {
         return symbolys;
     }
 

@@ -1,9 +1,12 @@
 
 $(document).ready(function() {
-    plot();
+    $.getJSON('http://localhost:8080/portofolio', function (data) {
+        console.log(data.shareList);
+        plot(data.shareList);
+    });
 });
 
-function plot() {
+function plot(data) {
     Highcharts.chart('container', {
         chart: {
             plotBackgroundColor: null,
@@ -12,7 +15,7 @@ function plot() {
             type: 'pie'
         },
         title: {
-            text: 'Browser market shares January, 2015 to May, 2015'
+            text: 'My Portofolio'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -30,30 +33,35 @@ function plot() {
                 }
             }
         },
+        // series: [{
+        //     name: 'Brands',
+        //     colorByPoint: true,
+        //     data: [{
+        //         name: 'Microsoft Internet Explorer',
+        //         y: 56.33
+        //     }, {
+        //         name: 'Chrome',
+        //         y: 24.03,
+        //         sliced: true,
+        //         selected: true
+        //     }, {
+        //         name: 'Firefox',
+        //         y: 10.38
+        //     }, {
+        //         name: 'Safari',
+        //         y: 4.77
+        //     }, {
+        //         name: 'Opera',
+        //         y: 0.91
+        //     }, {
+        //         name: 'Proprietary or Undetectable',
+        //         y: 0.2
+        //     }]
+        // }]
         series: [{
-            name: 'Brands',
+            name: 'My Portofolio',
             colorByPoint: true,
-            data: [{
-                name: 'Microsoft Internet Explorer',
-                y: 56.33
-            }, {
-                name: 'Chrome',
-                y: 24.03,
-                sliced: true,
-                selected: true
-            }, {
-                name: 'Firefox',
-                y: 10.38
-            }, {
-                name: 'Safari',
-                y: 4.77
-            }, {
-                name: 'Opera',
-                y: 0.91
-            }, {
-                name: 'Proprietary or Undetectable',
-                y: 0.2
-            }]
+            data: data
         }]
     });
 }

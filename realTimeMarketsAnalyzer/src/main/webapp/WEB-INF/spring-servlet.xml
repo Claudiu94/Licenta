@@ -11,4 +11,6 @@
 
     <bean id = "jsonParser" class = "com.mainPackage.util.JsonParser">
     </bean>
+
+    <bean id = "stockBrief" class = "com.mainPackage.util.StocksBrief" />
 </beans>

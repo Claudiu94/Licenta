@@ -1,10 +1,7 @@
 package com.mainPackage.Controlers;
 
 import com.mainPackage.database.ConnectionToDB;
-import com.mainPackage.util.Greetings;
-import com.mainPackage.util.JsonParser;
-import com.mainPackage.util.StocksBrief;
-import com.mainPackage.util.User;
+import com.mainPackage.util.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +31,9 @@ public class RestControllerServices {
 
   @Autowired
   JsonParser jsonParser;
+
+  @Autowired
+  StocksBrief stocksBrief;
 
   private String url = ":/localhost:3000/";
   private static final String template = "Hello, %s!";
@@ -81,7 +81,7 @@ public class RestControllerServices {
   @CrossOrigin(origins = "http://localhost:3000")
   @ResponseBody
   public StocksBrief symbols() throws IOException {
-    return new StocksBrief(jsonParser.getSymbols());
+    return stocksBrief;
   }
 
   @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -140,14 +140,26 @@ public class RestControllerServices {
   @RequestMapping(value = "/portofolio", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
   @ResponseBody
   @CrossOrigin(origins = "http://localhost:3000")
-  public String portofolio(@RequestParam(value="name", defaultValue="Claudiu_94") String user) {
+  public SharesBrief portofolio(@RequestParam(value="name", defaultValue="Claudiu_94") String user) {
     int userId = connectionToDB.getId(user);
     List<Map<String, Object>> data = connectionToDB.getShares(userId);
+    float sum = 0;
+    List<Share> shareList = new ArrayList<>();
 
     for (Map<String, Object> map : data) {
-      
+      int shares = (Integer)map.get("Shares");
+      Symbol symbol = stocksBrief.retreiveSymbolFromName(map.get("Symbol").toString());
+
+      shareList.add(new Share(symbol.getSymbol(), symbol.getPrice() * shares,
+              symbol.getCompanyName(), shares));
+      sum += symbol.getPrice() * shares;
     }
-    return null;
+
+    for (int i = 0; i < shareList.size(); i++) {
+      shareList.get(i).setY(shareList.get(i).getY() * 100 / sum);
+    }
+
+    return new SharesBrief(shareList);
   }
 
 }
