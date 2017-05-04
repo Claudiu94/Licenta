@@ -81,7 +81,7 @@ public class RestControllerServices {
   @CrossOrigin(origins = "http://localhost:3000")
   @ResponseBody
   public StocksBrief symbols() throws IOException {
-    return stocksBrief;
+      return stocksBrief;
   }
 
   @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -145,18 +145,25 @@ public class RestControllerServices {
     List<Map<String, Object>> data = connectionToDB.getShares(userId);
     float sum = 0;
     List<Share> shareList = new ArrayList<>();
+    List<Symbol> symbolList = new ArrayList<Symbol>(stocksBrief.getCompanies());
 
     for (Map<String, Object> map : data) {
       int shares = (Integer)map.get("Shares");
       Symbol symbol = stocksBrief.retreiveSymbolFromName(map.get("Symbol").toString());
 
+      symbolList.remove(symbol);
       shareList.add(new Share(symbol.getSymbol(), symbol.getPrice() * shares,
-              symbol.getCompanyName(), shares));
+              symbol.getCompanyName(), shares, symbol.getCurrency(), symbol.getPrice()));
       sum += symbol.getPrice() * shares;
     }
 
     for (int i = 0; i < shareList.size(); i++) {
       shareList.get(i).setY(shareList.get(i).getY() * 100 / sum);
+    }
+
+    for (Symbol symbol : symbolList) {
+      shareList.add(new Share(symbol.getSymbol(), 0,
+              symbol.getCompanyName(), 0, symbol.getCurrency(), symbol.getPrice()));
     }
 
     return new SharesBrief(shareList);

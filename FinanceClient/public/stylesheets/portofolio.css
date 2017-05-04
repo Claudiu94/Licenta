@@ -1,0 +1,19 @@
+.col-md-5, #cname {
+	width: 30%;
+}
+
+.col-md-3, .col-md-4, #price, #currency, #shares {
+	width: 10%;
+}
+
+#search-str {
+	width: 30%;
+}
+
+button {
+	width: 30%;
+}
+
+.row {
+	width: 19.5%;
+}

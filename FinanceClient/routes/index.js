@@ -39,7 +39,7 @@ router.get('/details', function(req, res, next) {
 });
 
 router.get('/portofolio', function(req, res, next) {
-	res.render('portofolio', {'session': req.session})
+	res.render('portofolio', {'session': req.session, 'portofolio': true})
 });
 
 

@@ -23,12 +23,4 @@ $(document).ready(function() {
 		if(jobCount == '0') {$('.no-result').show();}
 		else {$('.no-result').hide();}
 	});
-
-	$(".table-row").click(function(e){
-		var id = e.target.parentNode.id;
-		var name = e.target.parentNode.children[1].innerHTML;
-		var url = "http://localhost:3000/details?symbol=" + id + "&name=" + name;
-		console.log(url);
-		window.location.href = url;
-    });
 });

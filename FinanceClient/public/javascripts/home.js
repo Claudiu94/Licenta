@@ -42,4 +42,11 @@ $(document).ready(function(){
 		}]
 
 	});
+
+	$(".table-row").click(function(e){
+		var id = e.target.parentNode.id;
+		var name = e.target.parentNode.children[1].innerHTML;
+		var url = "http://localhost:3000/details?symbol=" + id + "&name=" + name;
+		window.location.href = url;
+    });
 });

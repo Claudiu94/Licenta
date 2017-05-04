@@ -34,15 +34,3 @@ tbody {
  	height: 400px;
 	overflow: auto;
 }
-
-.col-md-5 {
-	width: 59%;
-}
-
-.sym {
-	width: 16%;
-}
-
-.col-md-4 {
-	width: 13%;
-}

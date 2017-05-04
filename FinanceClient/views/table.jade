@@ -11,6 +11,9 @@ table.table.table-hover.table-bordered.results
       th.col-md-5 Company Name
       th.col-md-4 Price
       th.col-md-3 Currency
+      - if (portofolio)
+        th.col-md-3 Shares
+        th.col-md-6 Buy/Sell
     tr.warning.no-result
       td(colspan='4')
         i.fa.fa-warning
