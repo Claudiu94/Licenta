@@ -31,6 +31,10 @@ router.get('/home', function(req, res, next) {
 });
 
 router.get('/account', function(req, res, next) {
+	console.log(req.session);
+	if (req.session.cookie.originalMaxAge < 0)
+		req.session.cookie.originalMaxAge = 316000;
+
 	res.render('account', {'session': req.session})
 });
 
@@ -49,6 +53,15 @@ router.post('/account', function(req, res, next) {
 		console.log(req.body);
 		res.render('home', {'session': req.session});
 	}
+});
+
+router.get('/logout', function(req, res, next) {
+	delete req.session.username;
+	res.redirect('home');
+});
+
+router.get('/error', function(req, res, next) {
+	res.render('error', {'session': req.session})
 });
 
 module.exports = router;

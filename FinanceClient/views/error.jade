@@ -1,6 +1,12 @@
-extends layout
-
-block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+doctype html
+html
+	head
+		title Real Time Finance Analyzer
+		meta(charset='UTF-8')
+		script(src='https://code.jquery.com/jquery-3.1.1.min.js')
+		link(rel='stylesheet', href='/stylesheets/account.css', media='screen', type='text/css')
+	body
+		include navigation
+		.login-page(name='first_div')
+			.form(name='second_div')
+				p Something went wrong

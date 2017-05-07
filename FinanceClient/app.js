@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({secret: "Your secret key",
 				name: cookie_name,
-    			cookie: { maxAge: 3600000, expires : new Date(Date.now() + 720000)},
+    			cookie: {expires : new Date(Date.now() + 720000)},
     			proxy: true,
     			resave: true,
     			saveUninitialized: true}));

@@ -3,7 +3,6 @@ package com.mainPackage.Controlers;
 import com.mainPackage.database.ConnectionToDB;
 import com.mainPackage.util.*;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,6 @@ import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.HistoricalQuote;
 import yahoofinance.histquotes.Interval;
 
-import javax.enterprise.inject.Produces;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.ParseException;
@@ -38,8 +36,7 @@ public class RestControllerServices {
   private String url = ":/localhost:3000/";
   private static final String template = "Hello, %s!";
   private final AtomicLong counter = new AtomicLong();
-
-
+  private List<Share> shareList;
 
   @RequestMapping(value = "/greeting", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
   @ResponseBody
@@ -144,7 +141,7 @@ public class RestControllerServices {
     int userId = connectionToDB.getId(user);
     List<Map<String, Object>> data = connectionToDB.getShares(userId);
     float sum = 0;
-    List<Share> shareList = new ArrayList<>();
+    shareList = new ArrayList<>();
     List<Symbol> symbolList = new ArrayList<Symbol>(stocksBrief.getCompanies());
 
     for (Map<String, Object> map : data) {
@@ -167,6 +164,57 @@ public class RestControllerServices {
     }
 
     return new SharesBrief(shareList);
+  }
+
+  @RequestMapping(value = "/sellBuyShares/{userName}", method = RequestMethod.POST)
+  public RedirectView modifyShares(HttpServletRequest request, @RequestBody String body,
+                                   @PathVariable String userName) throws ParseException {
+
+    String type = request.getParameter("type");
+    String symbol = request.getParameter("symbol");
+    String name = stocksBrief.retreiveNameForSymbol(symbol);
+    int shares = Integer.valueOf(request.getParameter("sharesNumber"));
+    int userId = connectionToDB.getId(userName);
+    RedirectView redirectView = new RedirectView();
+    redirectView.setContentType("application/json");
+
+    System.out.println("User: " + userName + " Symbol: "+ symbol + " Type: " + type + " Shares: " + shares);
+
+    if (type.equals("sell"))
+      shares = -1 * shares;
+
+    List<Map<String, Object>> data = connectionToDB.getShares(userId, symbol);
+
+    if (data.size() == 1) {
+        Map<String, Object> row = data.get(0);
+        int currentShares = (Integer)row.get("Shares") + shares;
+
+        if (currentShares < 0) {
+          redirectView.setUrl("http://localhost:3000/error");
+
+          return redirectView;
+        } else if (currentShares == 0) {
+          connectionToDB.deleteSharesRow(userId, symbol);
+        } else {
+          connectionToDB.updateSharesRow(userId, symbol, currentShares);
+        }
+    } else if (data.size() == 0 && shares > 0) {
+      connectionToDB.saveShareRecord(userId, symbol, name, shares);
+    } else {
+      redirectView.setUrl("http://localhost:3000/error");
+
+      return redirectView;
+    }
+
+    redirectView.setUrl("http://localhost:3000/portofolio");
+    return redirectView;
+  }
+
+  Share getShare(String symbol) {
+    return shareList.stream()
+            .filter(share -> share.getName().equals(symbol))
+            .findFirst()
+            .orElse(null);
   }
 
 }

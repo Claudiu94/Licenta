@@ -48,4 +48,14 @@ public class StocksBrief {
             .findFirst()
             .orElse(null);
   }
+
+  public String retreiveNameForSymbol(String symName) {
+
+    Symbol symbol = symbols.stream()
+            .filter(sym -> sym.getSymbol().equals(symName))
+            .findFirst()
+            .orElse(null);
+
+    return symbol != null ? symbol.getCompanyName() : null;
+  }
 }

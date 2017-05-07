@@ -5,10 +5,10 @@ script(type='application/javascript', src='/javascripts/navigation.js')
 		section#body.width
 			.navbar
 				- if (typeof session.username !== 'undefined')
-					a(href='') #{session.username}
+					a#user(href='') #{session.username}
+					a(href='logout') Logout
 				- else
 					a(href='account') Sign In
-				a(href='') Another link
 			aside#sidebar.column-left
 				header
 					h1

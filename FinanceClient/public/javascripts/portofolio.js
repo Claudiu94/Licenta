@@ -1,6 +1,13 @@
+var username = null;
 
 $(document).ready(function() {
-    $.getJSON('http://localhost:8080/portofolio', function (data) {
+    var dataUrl = "http://localhost:8080/portofolio?name=";
+    username = document.getElementById("user");
+
+    if (username != null)
+        dataUrl += username.innerHTML;
+
+    $.getJSON(dataUrl, function (data) {
         var processedData = retreiveData(data.shareList);
         plot(processedData[0]);
         populateTable(processedData);        
@@ -19,7 +26,7 @@ function plot(data) {
             text: 'My Portofolio'
         },
         tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            pointFormat: 'Percentage: <b>{point.percentage:.1f}%</b> <br/> Price per share: <b>{point.price}</b>'
         },
         plotOptions: {
             pie: {
@@ -27,7 +34,7 @@ function plot(data) {
                 cursor: 'pointer',
                 dataLabels: {
                     enabled: true,
-                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    format: '<b>{point.companyName}</b>: {point.percentage:.1f} %',
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                     }
@@ -84,24 +91,31 @@ function retreiveData(rawData) {
 function populateTable(processedData) {
     var allData = processedData[0].concat(processedData[1]);
     var tbody = $('.results').children().eq(1);
-    var form =     "<form method=\"post\" action=\"http://localhost:8080/sellBuyShares\">"
-      + "<input type=\"text\" name=\"search-str\" id=\"search-str\" value=\"\"/>"
-      + "<button type=\"submit\" name=\"buy\" value=\"buy\">Buy</button>"
-      + "<button type=\"submit\" name=\"sell\" value=\"sell\">Sell</button>"
-    + "</form>"
+    var postLink = "http://localhost:8080/sellBuyShares";
+
+    // console.log(username.innerHTML);
+    if (username != null)
+        postLink = postLink + "/" + username.innerHTML;
+    else
+        postLink = postLink + "/Claudiu_94";    
 
     for (i in allData) {
-        console.log(allData[i]);
+        var form = "<form method=\"post\" action=\"" + postLink +
+        "\"><input type=\"text\" name=\"sharesNumber\" id=\"search-str\" value=\"\"/>"
+        + "<input type=\"hidden\" name=\"symbol\" value=\"" + allData[i].name
+        + "\"><button type=\"submit\" name=\"type\" value=\"buy\">Buy</button>"
+        + "<button type=\"submit\" name=\"type\" value=\"sell\">Sell</button>"
+        + "</form>"
         var row = "<tr id="
-                + allData[i].name
-                + "class=\"table-row\">"
-                + "<th class=\"row\">" + allData[i].name
-                + "</th><td id=\"cname\">" + allData[i].companyName
-                + "</td><td id=\"price\">" + allData[i].price
-                + "</td><td id=\"currency\">" + allData[i].currency
-                + "</td><td id=\"shares\">" + allData[i].shares
-                + "</td><td id=\"buySell\">" + form
-                + "</td></tr>"
+        + allData[i].name
+        + "class=\"table-row\">"
+        + "<th class=\"row\">" + allData[i].name
+        + "</th><td id=\"cname\">" + allData[i].companyName
+        + "</td><td id=\"price\">" + allData[i].price
+        + "</td><td id=\"currency\">" + allData[i].currency
+        + "</td><td id=\"shares\">" + allData[i].shares
+        + "</td><td id=\"buySell\">" + form
+        + "</td></tr>"
         tbody.append(row);
     }
 

@@ -43,6 +43,19 @@ public class ConnectionToDB {
 
                     " VALUES (?, ?, ?, ?, ?, ?)";
 
+    private static final String insertShare =
+            "INSERT INTO Shares (" +
+
+                    "PersonID, " +
+
+                    "Symbol," +
+
+                    "Name," +
+
+                    "Shares)" +
+
+                    " VALUES (?, ?, ?, ?)";
+
     private static final String getSqlData =
             "SELECT * FROM Users";
 
@@ -53,6 +66,10 @@ public class ConnectionToDB {
     private static final String getRowId = "select PersonID from Users where Username=";
 
     private static final String getRows = "select Symbol, Name, Shares from Shares where PersonID=";
+
+    private static final String updateSharesRow = "update Shares set Shares=";
+
+    private static final String deleteSharesRow = "delete from Shares where PersonID=";
 
     public void testConnection() {
         JdbcTemplate template = new JdbcTemplate(getDataSource());
@@ -86,6 +103,20 @@ public class ConnectionToDB {
         // execute insert query to insert the data
         // return number of row / rows processed by the executed query
         int row = template.update(insertSql, params, types);
+        System.out.println(row + " row inserted.");
+
+    }
+
+    public void saveShareRecord(int id, String symbol, String name, int shares ) {
+
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        Object[] params = new Object[] { id, symbol, name, shares};
+
+        int[] types = new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
+
+        // execute insert query to insert the data
+        // return number of row / rows processed by the executed query
+        int row = template.update(insertShare, params, types);
         System.out.println(row + " row inserted.");
 
     }
@@ -127,6 +158,38 @@ public class ConnectionToDB {
                 .append("\"" + userId + "\"").toString();
 
         return template.queryForList(sqlQuery);
+    }
+
+    public List<Map<String, Object>> getShares(int userId, String symbol) {
+
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        String sqlQuery = new StringBuilder().append(getRows)
+                .append("\"" + userId + "\"")
+                .append(" and Symbol=\"" + symbol + "\"")
+                .toString();
+
+        return template.queryForList(sqlQuery);
+    }
+
+    public void deleteSharesRow(int userId, String symbol) {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        String sqlQuery = new StringBuilder().append(deleteSharesRow)
+                .append("\"" + userId + "\"")
+                .append(" and Symbol=\"" + symbol + "\"")
+                .toString();
+
+        template.execute(sqlQuery);
+    }
+
+    public void updateSharesRow(int userId, String symbol, int shares) {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        String sqlQuery = new StringBuilder().append(updateSharesRow)
+                .append("\"" + shares + "\" where PersonID=")
+                .append("\"" + userId + "\"")
+                .append(" and Symbol=\"" + symbol + "\"")
+                .toString();
+
+        template.execute(sqlQuery);
     }
 
     public static DriverManagerDataSource getDataSource() {

@@ -1,11 +1,11 @@
-.col-md-5 {
+.col-md-5, #cname {
 	width: 59%;
 }
 
-.sym {
+.sym, .row {
 	width: 16%;
 }
 
-.col-md-4 {
+.col-md-4, #price {
 	width: 13%;
 }

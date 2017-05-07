@@ -22,7 +22,7 @@ table.table.table-hover.table-bordered.results
     - if (typeof companies !== 'undefined')
       each item in companies
         tr.table-row(id="#{item.symbol}")
-          th(scope='row') #{item.symbol}
-          td #{item.companyName}
-          td #{item.price}
-          td #{item.currency}
+          th.row(scope='row') #{item.symbol}
+          td#cname #{item.companyName}
+          td#price #{item.price}
+          td#currency #{item.currency}

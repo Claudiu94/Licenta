@@ -39,7 +39,7 @@ public class ConnectionDBTest {
 
     @Test
     public void getId() {
-        System.out.println(connectionToDB.getShares(4));
+        connectionToDB.deleteSharesRow(3, "AAPL");
     }
 
     @Test

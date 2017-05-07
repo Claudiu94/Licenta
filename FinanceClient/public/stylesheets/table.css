@@ -22,8 +22,8 @@ tr:hover {
 
 table tbody, table thead
 {
-    display: -moz-stack;
-    width: 100%;
+  display: -moz-stack;
+  width: 100%;
 }
 
 table {
@@ -31,6 +31,6 @@ table {
 }
 
 tbody {
- 	height: 400px;
-	overflow: auto;
+  height: 400px;
+  overflow: auto;
 }
