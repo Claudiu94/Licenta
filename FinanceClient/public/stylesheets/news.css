@@ -1,0 +1,15 @@
+.owl-carousel {
+	margin-top: 50px;
+}
+
+.owl-item {
+	background: #00FFFF;
+	height: 220px;
+}
+.owl-item .item {
+	margin-top: 44%;
+}
+
+.owl-item .item h4 {
+	text-align: center;
+}

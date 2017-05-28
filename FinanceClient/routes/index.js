@@ -64,4 +64,8 @@ router.get('/error', function(req, res, next) {
 	res.render('error', {'session': req.session})
 });
 
+router.get('/news', function(req, res, next) {
+	res.render('news', {'session': req.session})
+});
+
 module.exports = router;

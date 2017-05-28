@@ -1,0 +1,15 @@
+buy/sell asincron
+-disable sell button if needed
+-refresh chart after action
+-cron bean - init 2 times?
+
+-Cron
+-notifications
+-multiple portofolios
+-move shares from portofolio to portofolio
+-crud portofolio(name, add shares, balance, move shares)
+-portofolio alerts
+-tables of portofolio
+
+
+!!! DB client, ex: PhpMyAdmin

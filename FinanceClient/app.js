@@ -29,6 +29,7 @@ app.use(session({secret: "Your secret key",
     			resave: true,
     			saveUninitialized: true}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'node_modules')));
 
 app.use('/', index);
 app.use('/home', index);

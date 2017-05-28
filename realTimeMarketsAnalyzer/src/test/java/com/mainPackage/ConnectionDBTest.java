@@ -32,23 +32,23 @@ public class ConnectionDBTest {
         connectionToDB.testConnection();
     }
 
-    @Test
-    public void testNextId() {
-        System.out.println(connectionToDB.getNextId());
-    }
+//    @Test
+//    public void testNextId() {
+//        System.out.println(connectionToDB.getNextId());
+//    }
+//
+//    @Test
+//    public void getId() {
+//        connectionToDB.deleteSharesRow(3, "AAPL");
+//    }
 
-    @Test
-    public void getId() {
-        connectionToDB.deleteSharesRow(3, "AAPL");
-    }
-
-    @Test
-    public void getHistory() throws IOException {
-        System.setProperty("yahoofinance.baseurl.histquotes", "https://ichart.yahoo.com/table.csv");
-        Calendar from = Calendar.getInstance();
-        from.add(Calendar.YEAR, -2);
-        Stock appl = YahooFinance.get("AAPL");
-        appl.getHistory(from, Interval.DAILY);
-
-    }
+//    @Test
+//    public void getHistory() throws IOException {
+//        System.setProperty("yahoofinance.baseurl.histquotes", "https://ichart.yahoo.com/table.csv");
+//        Calendar from = Calendar.getInstance();
+//        from.add(Calendar.YEAR, -2);
+//        Stock appl = YahooFinance.get("AAPL");
+//        appl.getHistory(from, Interval.DAILY);
+//
+//    }
 }

@@ -69,7 +69,6 @@ public class RestControllerServices {
       l.add(quote.getClose().floatValue());
       list.add(l);
     }
-    Collections.reverse(list);
 
     return list.toJSONString();
   }
