@@ -19,6 +19,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/home', function(req, res, next) {
 	console.log("In /home");
+	console.log(req.session);
 	request('http://localhost:8080/stocks', function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			var data = JSON.parse(body);
@@ -43,6 +44,7 @@ router.get('/details', function(req, res, next) {
 });
 
 router.get('/portofolio', function(req, res, next) {
+	console.log(req.session);
 	res.render('portofolio', {'session': req.session, 'portofolio': true})
 });
 

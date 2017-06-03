@@ -9,13 +9,15 @@
 
     <context:component-scan base-package="com.mainPackage"/>
 
-    <bean id = "dbConnection" class = "com.mainPackage.database.ConnectionToDB">
+    <bean id="dbConnection" class="com.mainPackage.database.ConnectionToDB">
     </bean>
 
-    <bean id = "jsonParser" class = "com.mainPackage.util.JsonParser">
+    <bean id="jsonParser" class="com.mainPackage.util.JsonParser">
     </bean>
 
-    <bean id = "stockBrief" class = "com.mainPackage.util.StocksBrief" />
+    <bean id="stockBrief" class="com.mainPackage.util.StocksBrief" />
+
+    <bean id="portofolios" class="com.mainPackage.util.Portofolios" />
 
     <task:annotation-driven />
     <bean id="notificationCron" class="com.mainPackage.util.NotificationCron"></bean>

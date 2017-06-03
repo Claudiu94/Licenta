@@ -52,7 +52,9 @@ public class ConnectionToDB {
 
                     "Name," +
 
-                    "Shares)" +
+                    "Shares," +
+
+                    "PortofolioName)" +
 
                     " VALUES (?, ?, ?, ?)";
 
@@ -107,12 +109,12 @@ public class ConnectionToDB {
 
     }
 
-    public void saveShareRecord(int id, String symbol, String name, int shares ) {
+    public void saveShareRecord(int id, String symbol, String name, int shares, String porofolio) {
 
         JdbcTemplate template = new JdbcTemplate(getDataSource());
         Object[] params = new Object[] { id, symbol, name, shares};
 
-        int[] types = new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
+        int[] types = new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR};
 
         // execute insert query to insert the data
         // return number of row / rows processed by the executed query
@@ -171,22 +173,24 @@ public class ConnectionToDB {
         return template.queryForList(sqlQuery);
     }
 
-    public void deleteSharesRow(int userId, String symbol) {
+    public void deleteSharesRow(int userId, String symbol, String portofolio) {
         JdbcTemplate template = new JdbcTemplate(getDataSource());
         String sqlQuery = new StringBuilder().append(deleteSharesRow)
-                .append("\"" + userId + "\"")
-                .append(" and Symbol=\"" + symbol + "\"")
+                .append(userId + " and PorotfolioName=\"")
+                .append(portofolio)
+                .append("\" and Symbol=\"" + symbol + "\"")
                 .toString();
 
         template.execute(sqlQuery);
     }
 
-    public void updateSharesRow(int userId, String symbol, int shares) {
+    public void updateSharesRow(int userId, String symbol, int shares, String portofolio) {
         JdbcTemplate template = new JdbcTemplate(getDataSource());
         String sqlQuery = new StringBuilder().append(updateSharesRow)
-                .append("\"" + shares + "\" where PersonID=")
-                .append("\"" + userId + "\"")
-                .append(" and Symbol=\"" + symbol + "\"")
+                .append(shares + " where PersonID=")
+                .append(userId + " and PortofolioName=\"")
+                .append(portofolio)
+                .append("\" and Symbol=\"" + symbol + "\"")
                 .toString();
 
         template.execute(sqlQuery);

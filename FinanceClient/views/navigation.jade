@@ -4,7 +4,7 @@ script(type='application/javascript', src='/javascripts/navigation.js')
 		input(type='hidden', value=local_data)#myLocalDataObj
 		section#body.width
 			.navbar
-				- if (typeof session.username !== 'undefined')
+				- if (typeof session !== 'undefined' && typeof session.username !== 'undefined')
 					a#user(href='') #{session.username}
 					a(href='logout') Logout
 				- else
@@ -15,7 +15,7 @@ script(type='application/javascript', src='/javascripts/navigation.js')
 						a(href='')
 							span(style='font-size: 63px; display: block;') Finance
 							| Analyzer
-					- if (typeof session.username !== 'undefined')  
+					- if (typeof session !== 'undefined' && typeof session.username !== 'undefined')  
 						h2 Welcome to my website,  #{session.username}!
 					- else
 						h2 Welcome to my website!

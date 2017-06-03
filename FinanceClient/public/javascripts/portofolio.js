@@ -8,7 +8,7 @@ $(document).ready(function() {
         dataUrl += username.innerHTML;
 
     $.getJSON(dataUrl, function (data) {
-        var processedData = retreiveData(data.shareList);
+        var processedData = retreiveData(data.sharesList);
         plot(processedData[0]);
         populateTable(processedData);        
     });
@@ -101,14 +101,15 @@ function populateTable(processedData) {
 
     for (i in allData) {
         var form = "<form method=\"post\" action=\"" + postLink +
-        "\"><input type=\"text\" name=\"sharesNumber\" id=\"search-str\" value=\"\"/>"
+        "\"><input type=\"text\" name=\"sharesNumber\" class=\"search-str\" value=\"\"/>"
         + "<input type=\"hidden\" name=\"symbol\" value=\"" + allData[i].name
         + "\"><button type=\"submit\" name=\"type\" value=\"buy\">Buy</button>"
-        + "<button type=\"submit\" name=\"type\" value=\"sell\">Sell</button>"
+        + "<button type=\"submit\" name=\"type\" value=\"sell\" disabled>Sell</button>"
+        + "<button type=\"submit\" name=\"type\" value=\"move\">Move</button>"
         + "</form>"
         var row = "<tr id="
         + allData[i].name
-        + "class=\"table-row\">"
+        + "\" class=\"table-row\">"
         + "<th class=\"row\">" + allData[i].name
         + "</th><td id=\"cname\">" + allData[i].companyName
         + "</td><td id=\"price\">" + allData[i].price
@@ -118,6 +119,17 @@ function populateTable(processedData) {
         + "</td></tr>"
         tbody.append(row);
     }
+    $(".search-str").keyup(function() {
+        var nrShares = parseInt($(document.activeElement).val(), 10);
+        var parent = $(document.activeElement).parent();
+        var existingShares = parseInt(parent.parent().parent().children()[4].firstChild.data, 10);
+        var sellButton = parent.parent().children()[0][3];
 
-
+        if (!Number.isNaN(nrShares) && nrShares > 0 && existingShares >= nrShares) {
+            $(sellButton).prop("disabled", false);
+        }
+        else {
+            $(sellButton).prop("disabled", true);
+        }
+    });
 }

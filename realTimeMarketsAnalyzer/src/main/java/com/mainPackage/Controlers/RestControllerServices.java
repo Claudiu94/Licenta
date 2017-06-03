@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -26,17 +27,14 @@ public class RestControllerServices {
 
   @Autowired
   ConnectionToDB connectionToDB;
-
-  @Autowired
-  JsonParser jsonParser;
-
   @Autowired
   StocksBrief stocksBrief;
+  @Autowired
+  Portofolios portofolios;
 
   private String url = ":/localhost:3000/";
   private static final String template = "Hello, %s!";
   private final AtomicLong counter = new AtomicLong();
-  private List<Share> shareList;
 
   @RequestMapping(value = "/greeting", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
   @ResponseBody
@@ -136,33 +134,13 @@ public class RestControllerServices {
   @RequestMapping(value = "/portofolio", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
   @ResponseBody
   @CrossOrigin(origins = "http://localhost:3000")
-  public SharesBrief portofolio(@RequestParam(value="name", defaultValue="Claudiu_94") String user) {
-    int userId = connectionToDB.getId(user);
-    List<Map<String, Object>> data = connectionToDB.getShares(userId);
-    float sum = 0;
-    shareList = new ArrayList<>();
-    List<Symbol> symbolList = new ArrayList<Symbol>(stocksBrief.getCompanies());
+  public SharesList portofolio(@RequestParam(value="name", defaultValue="Claudiu_94") String user) {
 
-    for (Map<String, Object> map : data) {
-      int shares = (Integer)map.get("Shares");
-      Symbol symbol = stocksBrief.retreiveSymbolFromName(map.get("Symbol").toString());
-
-      symbolList.remove(symbol);
-      shareList.add(new Share(symbol.getSymbol(), symbol.getPrice() * shares,
-              symbol.getCompanyName(), shares, symbol.getCurrency(), symbol.getPrice()));
-      sum += symbol.getPrice() * shares;
+    try {
+      return portofolios.retreiveSharesFromDb(user);
+    } catch (ExecutionException e) {
+      return new SharesList(Collections.EMPTY_LIST);
     }
-
-    for (int i = 0; i < shareList.size(); i++) {
-      shareList.get(i).setY(shareList.get(i).getY() * 100 / sum);
-    }
-
-    for (Symbol symbol : symbolList) {
-      shareList.add(new Share(symbol.getSymbol(), 0,
-              symbol.getCompanyName(), 0, symbol.getCurrency(), symbol.getPrice()));
-    }
-
-    return new SharesBrief(shareList);
   }
 
   @RequestMapping(value = "/sellBuyShares/{userName}", method = RequestMethod.POST)
@@ -193,27 +171,29 @@ public class RestControllerServices {
 
           return redirectView;
         } else if (currentShares == 0) {
-          connectionToDB.deleteSharesRow(userId, symbol);
+          connectionToDB.deleteSharesRow(userId, symbol, "Portofolio 1");
         } else {
-          connectionToDB.updateSharesRow(userId, symbol, currentShares);
+          connectionToDB.updateSharesRow(userId, symbol, currentShares, "Portofolio 1");
         }
     } else if (data.size() == 0 && shares > 0) {
-      connectionToDB.saveShareRecord(userId, symbol, name, shares);
+      connectionToDB.saveShareRecord(userId, symbol, name, shares, "Portofolio 1");
     } else {
       redirectView.setUrl("http://localhost:3000/error");
 
       return redirectView;
     }
 
+    portofolios.invalidateortofoliosCache();
     redirectView.setUrl("http://localhost:3000/portofolio");
+
     return redirectView;
   }
 
-  Share getShare(String symbol) {
-    return shareList.stream()
-            .filter(share -> share.getName().equals(symbol))
-            .findFirst()
-            .orElse(null);
-  }
+//  Share getShare(String symbol) {
+//    return shareList.stream()
+//            .filter(share -> share.getName().equals(symbol))
+//            .findFirst()
+//            .orElse(null);
+//  }
 
 }

@@ -1,19 +1,72 @@
 .col-md-5, #cname {
-	width: 30%;
+	width: 25%;
 }
 
 .col-md-3, .col-md-4, #price, #currency, #shares {
-	width: 10%;
+	width: 9%;
 }
 
-#search-str {
-	width: 30%;
+/*.col-md-6 {
+	width: %;
+}*/
+
+.search-str {
+	width: 20%;
 }
 
 button {
-	width: 30%;
+	width: 25%;
 }
 
 .row {
-	width: 19.5%;
+	width: 18.5%;
+}
+
+#portofolios {
+	margin: 0 auto;
+	max-width: 1000px;
+	min-width: 310px;
+	margin-bottom: 50px;
+    height: 60px;
+}
+
+.button-class {
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.2s; /* Safari */
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+
+.button1 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #4CAF50;
+    float: right;
+}
+
+.button1:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.select-style {
+    border: 2px solid #4caf50;
+    width: 25%;
+    border-radius: 3px;
+    overflow: hidden;
+    height: 84%;
+    text-align: center;
+    margin: 4px 2px;
+    display: inline-block;
+    font-size: 16px;
+    background: #fafafa url("img/icon-select.png") no-repeat 90% 50%;
+}
+
+.select-style select:focus {
+    outline: none;
 }
