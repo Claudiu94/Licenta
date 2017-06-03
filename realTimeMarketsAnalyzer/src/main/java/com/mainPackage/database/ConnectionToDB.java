@@ -67,7 +67,7 @@ public class ConnectionToDB {
 
     private static final String getRowId = "select PersonID from Users where Username=";
 
-    private static final String getRows = "select Symbol, Name, Shares from Shares where PersonID=";
+    private static final String getRows = "select Symbol, Name, Shares, PortofolioName from Shares where PersonID=";
 
     private static final String updateSharesRow = "update Shares set Shares=";
 
@@ -157,12 +157,13 @@ public class ConnectionToDB {
 
         JdbcTemplate template = new JdbcTemplate(getDataSource());
         String sqlQuery = new StringBuilder().append(getRows)
-                .append("\"" + userId + "\"").toString();
+                .append("\"" + userId + "\"")
+                .toString();;
 
         return template.queryForList(sqlQuery);
     }
 
-    public List<Map<String, Object>> getShares(int userId, String symbol) {
+    public List<Map<String, Object>> getSharesForSymbol(int userId, String symbol) {
 
         JdbcTemplate template = new JdbcTemplate(getDataSource());
         String sqlQuery = new StringBuilder().append(getRows)
@@ -194,6 +195,23 @@ public class ConnectionToDB {
                 .toString();
 
         template.execute(sqlQuery);
+    }
+
+    public List<String> getPortofolios(int userId) {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        List<String> portofolios = new ArrayList<>();
+        String sqlQuery = new StringBuilder()
+                .append("select Portofolio from Portofolios where PersonId=")
+                .append(userId)
+                .toString();
+
+        List<Map<String, Object>> data = template.queryForList(sqlQuery);
+
+        for (Map<String, Object> map : data) {
+            portofolios.add((String)map.get("Portofolio"));
+        }
+
+        return portofolios;
     }
 
     public static DriverManagerDataSource getDataSource() {

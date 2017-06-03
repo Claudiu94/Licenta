@@ -10,14 +10,17 @@ public class Share {
     private String companyName;
     private int shares;
     private String currency;
+    private String portofolio;
 
-    public  Share(String name, float y, String companyName, int shares, String currency, float price) {
+    public  Share(String name, float y, String companyName, int shares,
+                  String currency, float price, String portofolio) {
         this.name = name;
         this.y = y;
         this.companyName = companyName;
         this.shares = shares;
         this.currency = currency;
         this.price = price;
+        this.portofolio = portofolio;
     }
     public String getName() {
         return name;
@@ -45,5 +48,13 @@ public class Share {
 
     public float getPrice() {
         return price;
+    }
+
+    public String getPortofolio() {
+        return portofolio;
+    }
+
+    public void setShares(int shares) {
+        this.shares = shares;
     }
 }

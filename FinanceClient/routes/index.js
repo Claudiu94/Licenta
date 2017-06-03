@@ -70,4 +70,8 @@ router.get('/news', function(req, res, next) {
 	res.render('news', {'session': req.session})
 });
 
+router.get('/move-shares', function(req, res, next) {
+	res.render('move-shares', {'session': req.session})
+});
+
 module.exports = router;

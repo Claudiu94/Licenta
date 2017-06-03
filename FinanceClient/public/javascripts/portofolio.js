@@ -1,17 +1,36 @@
 var username = null;
+var dataUrl = "http://localhost:8080/portofolio?name=";
+var portofoliosUrl= "http://localhost:8080/portofolioNames?name=";
 
 $(document).ready(function() {
-    var dataUrl = "http://localhost:8080/portofolio?name=";
     username = document.getElementById("user");
 
-    if (username != null)
+    if (username != null) {
         dataUrl += username.innerHTML;
+        portofoliosUrl += username.innerHTML;
+    }
 
-    $.getJSON(dataUrl, function (data) {
-        var processedData = retreiveData(data.sharesList);
-        plot(processedData[0]);
-        populateTable(processedData);        
-    });
+    $.getJSON(portofoliosUrl, function(data) {
+        addPortofolios(data);
+    })
+
+    $('.button1').click(function() {
+        var txt = $('.button1').text();
+
+        if (txt == 'New Portofolio') {
+            $('.pname').css("display", "inline-block");
+            $('.button1').html('Create Portofolio');
+        }
+        else {
+            $('.pname').css("display", "none");
+            $('.button1').html('New Portofolio');
+        }
+
+    })
+
+    $('.select-style').change(function() {
+        getPortofolioData();
+    })
 });
 
 function plot(data) {
@@ -89,10 +108,12 @@ function retreiveData(rawData) {
 }
 
 function populateTable(processedData) {
+    console.log(processedData)
     var allData = processedData[0].concat(processedData[1]);
     var tbody = $('.results').children().eq(1);
     var postLink = "http://localhost:8080/sellBuyShares";
 
+    $('.results').children().eq(1).empty()
     // console.log(username.innerHTML);
     if (username != null)
         postLink = postLink + "/" + username.innerHTML;
@@ -100,14 +121,14 @@ function populateTable(processedData) {
         postLink = postLink + "/Claudiu_94";    
 
     for (i in allData) {
-        var form = "<form method=\"post\" action=\"" + postLink +
-        "\"><input type=\"text\" name=\"sharesNumber\" class=\"search-str\" value=\"\"/>"
+        var form = "<form method=\"post\" action=\"" + postLink
+        + "\"><input type=\"text\" name=\"sharesNumber\" class=\"search-str\" value=\"\"/>"
         + "<input type=\"hidden\" name=\"symbol\" value=\"" + allData[i].name
         + "\"><button type=\"submit\" name=\"type\" value=\"buy\">Buy</button>"
         + "<button type=\"submit\" name=\"type\" value=\"sell\" disabled>Sell</button>"
-        + "<button type=\"submit\" name=\"type\" value=\"move\">Move</button>"
-        + "</form>"
-        var row = "<tr id="
+        + "<input type=\"hidden\" name=\"portofolio\" value=\"" + $('.select-style').val()
+        + "\"</input></form>"
+        var row = "<tr id=\""
         + allData[i].name
         + "\" class=\"table-row\">"
         + "<th class=\"row\">" + allData[i].name
@@ -116,6 +137,7 @@ function populateTable(processedData) {
         + "</td><td id=\"currency\">" + allData[i].currency
         + "</td><td id=\"shares\">" + allData[i].shares
         + "</td><td id=\"buySell\">" + form
+        + "<button class=\"move\" name=\"type\" value=\"move\">Move</button>"
         + "</td></tr>"
         tbody.append(row);
     }
@@ -131,5 +153,44 @@ function populateTable(processedData) {
         else {
             $(sellButton).prop("disabled", true);
         }
+    });
+
+    $('.move').click(function() {
+        var redirectUrl = window.location.href;
+        var shares = $(document.activeElement).parent().parent().children()[5].children[0];
+        var sym = $(document.activeElement).parent().parent()[0];
+        
+        sym = $(sym).attr('id');
+        shares = $(shares)[0][0].value
+
+        redirectUrl = redirectUrl.substring(0, redirectUrl.lastIndexOf("/"));
+        redirectUrl += "/move-shares?from=" + $('.select-style').val() + "&shares=" + shares +"&sym=" + sym;
+        window.location.replace(redirectUrl);
+    })
+}
+
+function addPortofolios(portofolios) {
+    var htmlText = "";
+
+    for (i in portofolios) {
+        htmlText += "<option>" + portofolios[i]
+        + "</option>\n";
+    }
+    $('.select-style').append(htmlText);
+
+    getPortofolioData();
+}
+
+function getPortofolioData() {
+    var dataUrl1 = dataUrl;
+
+    if ($('.select-style').val() != null) {
+        dataUrl1 += "&portofolio=" + $('.select-style').val();
+    }
+    console.log(dataUrl1)
+    $.getJSON(dataUrl1, function (data) {
+        var processedData = retreiveData(data.sharesList);
+        plot(processedData[0]);
+        populateTable(processedData);        
     });
 }

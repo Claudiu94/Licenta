@@ -27,10 +27,10 @@ public class ConnectionDBTest {
     @Autowired
     ConnectionToDB connectionToDB;
 
-    @Test
-    public void test() {
-        connectionToDB.testConnection();
-    }
+//    @Test
+//    public void test() {
+//        System.out.println(connectionToDB.getPortofolios(5));
+//    }
 
 //    @Test
 //    public void testNextId() {

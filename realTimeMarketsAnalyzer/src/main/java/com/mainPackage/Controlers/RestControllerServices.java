@@ -134,33 +134,47 @@ public class RestControllerServices {
   @RequestMapping(value = "/portofolio", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
   @ResponseBody
   @CrossOrigin(origins = "http://localhost:3000")
-  public SharesList portofolio(@RequestParam(value="name", defaultValue="Claudiu_94") String user) {
+  public SharesList portofolio(@RequestParam(value="name", defaultValue="Claudiu_94") String user,
+                               @RequestParam(value="portofolio", defaultValue = "Portofolio 1") String portofolio) {
 
     try {
-      return portofolios.retreiveSharesFromDb(user);
+      return portofolios.retreiveSharesFromDb(user, portofolio);
     } catch (ExecutionException e) {
       return new SharesList(Collections.EMPTY_LIST);
     }
   }
 
+
+  @RequestMapping(value = "/portofolioNames", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+  @ResponseBody
+  @CrossOrigin(origins = "http://localhost:3000")
+  public List<String> getPortofolios(@RequestParam(value="name", defaultValue="Claudiu_94") String user) {
+    int userId = connectionToDB.getId(user);
+
+    return connectionToDB.getPortofolios(userId);
+  }
   @RequestMapping(value = "/sellBuyShares/{userName}", method = RequestMethod.POST)
   public RedirectView modifyShares(HttpServletRequest request, @RequestBody String body,
                                    @PathVariable String userName) throws ParseException {
 
     String type = request.getParameter("type");
     String symbol = request.getParameter("symbol");
+    String portofolio = request.getParameter("portofolio");
     String name = stocksBrief.retreiveNameForSymbol(symbol);
     int shares = Integer.valueOf(request.getParameter("sharesNumber"));
     int userId = connectionToDB.getId(userName);
     RedirectView redirectView = new RedirectView();
+
     redirectView.setContentType("application/json");
+    if (portofolio == null || portofolio.isEmpty())
+      portofolio = "Portofolio 1";
 
     System.out.println("User: " + userName + " Symbol: "+ symbol + " Type: " + type + " Shares: " + shares);
 
     if (type.equals("sell"))
       shares = -1 * shares;
 
-    List<Map<String, Object>> data = connectionToDB.getShares(userId, symbol);
+    List<Map<String, Object>> data = connectionToDB.getSharesForSymbol(userId, symbol);
 
     if (data.size() == 1) {
         Map<String, Object> row = data.get(0);
@@ -171,12 +185,12 @@ public class RestControllerServices {
 
           return redirectView;
         } else if (currentShares == 0) {
-          connectionToDB.deleteSharesRow(userId, symbol, "Portofolio 1");
+          connectionToDB.deleteSharesRow(userId, symbol, portofolio);
         } else {
-          connectionToDB.updateSharesRow(userId, symbol, currentShares, "Portofolio 1");
+          connectionToDB.updateSharesRow(userId, symbol, currentShares, portofolio);
         }
     } else if (data.size() == 0 && shares > 0) {
-      connectionToDB.saveShareRecord(userId, symbol, name, shares, "Portofolio 1");
+      connectionToDB.saveShareRecord(userId, symbol, name, shares, portofolio);
     } else {
       redirectView.setUrl("http://localhost:3000/error");
 
