@@ -29,7 +29,7 @@ public class ConnectionDBTest {
 
 //    @Test
 //    public void test() {
-//        System.out.println(connectionToDB.getPortofolios(5));
+//        connectionToDB.deletePortofolio(5, "New Portofolio");
 //    }
 
 //    @Test

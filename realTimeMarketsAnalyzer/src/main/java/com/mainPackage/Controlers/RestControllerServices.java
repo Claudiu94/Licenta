@@ -153,6 +153,35 @@ public class RestControllerServices {
 
     return connectionToDB.getPortofolios(userId);
   }
+
+  @RequestMapping(value = "/create-portofolio", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+  @ResponseBody
+  @CrossOrigin(origins = "http://localhost:3000")
+  public List<String> addNewPortofolio(@RequestParam(value="user", defaultValue="Claudiu_94") String user,
+                                       @RequestParam(value="portofolioName") String portofolio) {
+    int userId = connectionToDB.getId(user);
+
+    if (portofolio != null && !portofolio.isEmpty()) {
+      connectionToDB.addPortofolio(userId, portofolio);
+    }
+
+    return connectionToDB.getPortofolios(userId);
+  }
+
+  @RequestMapping(value = "/delete-portofolio", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+  @ResponseBody
+  @CrossOrigin(origins = "http://localhost:3000")
+  public List<String> deletePortofolio(@RequestParam(value="user", defaultValue="Claudiu_94") String user,
+                                       @RequestParam(value="portofolioName") String portofolio) {
+    int userId = connectionToDB.getId(user);
+
+    if (portofolio != null && !portofolio.isEmpty()) {
+      connectionToDB.deletePortofolio(userId, portofolio);
+    }
+
+    return connectionToDB.getPortofolios(userId);
+  }
+
   @RequestMapping(value = "/sellBuyShares/{userName}", method = RequestMethod.POST)
   public RedirectView modifyShares(HttpServletRequest request, @RequestBody String body,
                                    @PathVariable String userName) throws ParseException {
@@ -174,7 +203,7 @@ public class RestControllerServices {
     if (type.equals("sell"))
       shares = -1 * shares;
 
-    List<Map<String, Object>> data = connectionToDB.getSharesForSymbol(userId, symbol);
+    List<Map<String, Object>> data = connectionToDB.getSharesForSymbolAndPortofolio(userId, symbol, portofolio);
 
     if (data.size() == 1) {
         Map<String, Object> row = data.get(0);
@@ -201,6 +230,60 @@ public class RestControllerServices {
     redirectView.setUrl("http://localhost:3000/portofolio");
 
     return redirectView;
+  }
+
+  @RequestMapping(value = "/move-shares", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+  @CrossOrigin(origins = "http://localhost:3000")
+  public boolean moveShares(@RequestParam(value="name", defaultValue="Claudiu_94") String user,
+                                 @RequestParam(value="from") String from,
+                                 @RequestParam(value = "to") String to,
+                                 @RequestParam(value = "symbol") String sym,
+                                 @RequestParam(value = "shares") int shares) {
+    int userId = connectionToDB.getId(user);
+
+    if (user == null || from == null || to == null
+            || sym == null || shares == 0) {
+      return false;
+    }
+
+    //update from portofolio
+    List<Map<String, Object>> data = connectionToDB.getSharesForSymbolAndPortofolio(userId, sym, from);
+
+    if (data.size() == 1) {
+      Map<String, Object> row = data.get(0);
+      int currentShares = (Integer) row.get("Shares") - shares;
+
+      if (currentShares < 0) {
+        return false;
+      } else if (currentShares == 0) {
+        connectionToDB.deleteSharesRow(userId, sym, from);
+      } else {
+        connectionToDB.updateSharesRow(userId, sym, currentShares, from);
+      }
+    }
+
+    //update to portofolio
+    data = connectionToDB.getSharesForSymbolAndPortofolio(userId, sym, to);
+
+    if (data.size() == 1) {
+      Map<String, Object> row = data.get(0);
+      int currentShares = (Integer) row.get("Shares") + shares;
+
+      if (currentShares < 0) {
+        return false;
+      } else if (currentShares == 0) {
+        connectionToDB.deleteSharesRow(userId, sym, to);
+      } else {
+        connectionToDB.updateSharesRow(userId, sym, currentShares, to);
+      }
+    }
+    else if (data.size() == 0 && shares > 0) {
+      connectionToDB.saveShareRecord(userId, sym, stocksBrief.retreiveNameForSymbol(sym), shares, to);
+    }
+
+    portofolios.invalidateortofoliosCache();
+
+    return true;
   }
 
 //  Share getShare(String symbol) {

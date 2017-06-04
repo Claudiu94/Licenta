@@ -14,11 +14,14 @@ html
 	body
 		include navigation
 		section#content
-			#portofolios
+			div.portofolio
 				input.pname(type='text', placeholder='Enter new portofolio name...')
 				button.button-class.button1.create-btn
 					| New Portofolio
 				select.select-style
 			#container
+			div.portofolio
+				button.button-class.button1.delete-btn
+						| Delete Current Portofolio
 			include table
 			include news

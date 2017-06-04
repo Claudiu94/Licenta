@@ -56,7 +56,7 @@ public class ConnectionToDB {
 
                     "PortofolioName)" +
 
-                    " VALUES (?, ?, ?, ?)";
+                    " VALUES (?, ?, ?, ?, ?)";
 
     private static final String getSqlData =
             "SELECT * FROM Users";
@@ -109,12 +109,13 @@ public class ConnectionToDB {
 
     }
 
-    public void saveShareRecord(int id, String symbol, String name, int shares, String porofolio) {
+    public void saveShareRecord(int id, String symbol, String name, int shares, String portofolio) {
 
         JdbcTemplate template = new JdbcTemplate(getDataSource());
-        Object[] params = new Object[] { id, symbol, name, shares};
+        Object[] params = new Object[] {id, symbol, name, shares, portofolio};
 
-        int[] types = new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR};
+        int[] types = new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
+                Types.INTEGER, Types.VARCHAR};
 
         // execute insert query to insert the data
         // return number of row / rows processed by the executed query
@@ -163,12 +164,13 @@ public class ConnectionToDB {
         return template.queryForList(sqlQuery);
     }
 
-    public List<Map<String, Object>> getSharesForSymbol(int userId, String symbol) {
+    public List<Map<String, Object>> getSharesForSymbolAndPortofolio(int userId, String symbol, String portofolio) {
 
         JdbcTemplate template = new JdbcTemplate(getDataSource());
         String sqlQuery = new StringBuilder().append(getRows)
                 .append("\"" + userId + "\"")
                 .append(" and Symbol=\"" + symbol + "\"")
+                .append(" and PortofolioName=\"" + portofolio + "\"")
                 .toString();
 
         return template.queryForList(sqlQuery);
@@ -177,7 +179,7 @@ public class ConnectionToDB {
     public void deleteSharesRow(int userId, String symbol, String portofolio) {
         JdbcTemplate template = new JdbcTemplate(getDataSource());
         String sqlQuery = new StringBuilder().append(deleteSharesRow)
-                .append(userId + " and PorotfolioName=\"")
+                .append(userId + " and PortofolioName=\"")
                 .append(portofolio)
                 .append("\" and Symbol=\"" + symbol + "\"")
                 .toString();
@@ -212,6 +214,36 @@ public class ConnectionToDB {
         }
 
         return portofolios;
+    }
+
+    public void addPortofolio(int userId, String portofolio) {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        Object[] params = new Object[] {userId, portofolio};
+        int[] types = new int[] { Types.INTEGER, Types.VARCHAR};
+        String sqlQuery = new StringBuilder()
+                .append("insert into Portofolios(PersonId, Portofolio) values(?, ?)")
+                .toString();
+        int row = template.update(sqlQuery, params, types);
+        System.out.println(row + " row inserted.");
+    }
+
+    public void deletePortofolio(int userId, String portofolio) {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        String sqlQuery = new StringBuilder()
+                .append("delete from Portofolios where Portofolio=\"")
+                .append(portofolio + "\"")
+                .append(" and PersonId=")
+                .append(userId)
+                .toString();
+        String sqlQuery1 = new StringBuilder()
+                .append("delete from Shares where PersonId=")
+                .append(userId)
+                .append(" and PortofolioName=\"")
+                .append(portofolio + "\"")
+                .toString();
+
+        template.execute(sqlQuery);
+        template.execute(sqlQuery1);
     }
 
     public static DriverManagerDataSource getDataSource() {

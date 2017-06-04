@@ -14,16 +14,24 @@ $(document).ready(function() {
         addPortofolios(data);
     })
 
-    $('.button1').click(function() {
-        var txt = $('.button1').text();
+    $('.create-btn').click(function() {
+        var txt = $('.create-btn').text();
 
         if (txt == 'New Portofolio') {
             $('.pname').css("display", "inline-block");
-            $('.button1').html('Create Portofolio');
+            $('.create-btn').html('Create Portofolio');
         }
         else {
+            var url = "http://localhost:8080/create-portofolio?user="
+            if (username != null)
+                url += username.innerHTML;
+            url += "&portofolioName=" + $('.pname').val();
+
+            $.getJSON(url, function(data) {
+                addPortofolios(data);
+            })
             $('.pname').css("display", "none");
-            $('.button1').html('New Portofolio');
+            $('.create-btn').html('New Portofolio');
         }
 
     })
@@ -31,7 +39,23 @@ $(document).ready(function() {
     $('.select-style').change(function() {
         getPortofolioData();
     })
+
+    $('.delete-btn').click(function() {
+        deletePortofolio();
+    })
 });
+
+function deletePortofolio() {
+    var url = "http://localhost:8080/delete-portofolio?user="
+    
+    if (username != null)
+        url += username.innerHTML;
+
+    url += "&portofolioName=" + $('.select-style').val();
+    $.getJSON(url, function(data) {
+        location.reload();
+    })
+}
 
 function plot(data) {
     Highcharts.chart('container', {
@@ -42,7 +66,7 @@ function plot(data) {
             type: 'pie'
         },
         title: {
-            text: 'My Portofolio'
+            text: $('.select-style').val()
         },
         tooltip: {
             pointFormat: 'Percentage: <b>{point.percentage:.1f}%</b> <br/> Price per share: <b>{point.price}</b>'
@@ -108,7 +132,7 @@ function retreiveData(rawData) {
 }
 
 function populateTable(processedData) {
-    console.log(processedData)
+    // console.log(processedData)
     var allData = processedData[0].concat(processedData[1]);
     var tbody = $('.results').children().eq(1);
     var postLink = "http://localhost:8080/sellBuyShares";
@@ -137,7 +161,7 @@ function populateTable(processedData) {
         + "</td><td id=\"currency\">" + allData[i].currency
         + "</td><td id=\"shares\">" + allData[i].shares
         + "</td><td id=\"buySell\">" + form
-        + "<button class=\"move\" name=\"type\" value=\"move\">Move</button>"
+        + "<button class=\"move\" name=\"type\" value=\"move\" disabled>Move</button>"
         + "</td></tr>"
         tbody.append(row);
     }
@@ -146,12 +170,15 @@ function populateTable(processedData) {
         var parent = $(document.activeElement).parent();
         var existingShares = parseInt(parent.parent().parent().children()[4].firstChild.data, 10);
         var sellButton = parent.parent().children()[0][3];
+        var moveButton = parent.parent().children()[1];
 
         if (!Number.isNaN(nrShares) && nrShares > 0 && existingShares >= nrShares) {
             $(sellButton).prop("disabled", false);
+            $(moveButton).prop("disabled", false);
         }
         else {
             $(sellButton).prop("disabled", true);
+            $(moveButton).prop("disabled", true);
         }
     });
 
@@ -176,6 +203,7 @@ function addPortofolios(portofolios) {
         htmlText += "<option>" + portofolios[i]
         + "</option>\n";
     }
+    $('.select-style').empty();
     $('.select-style').append(htmlText);
 
     getPortofolioData();
@@ -187,7 +215,7 @@ function getPortofolioData() {
     if ($('.select-style').val() != null) {
         dataUrl1 += "&portofolio=" + $('.select-style').val();
     }
-    console.log(dataUrl1)
+
     $.getJSON(dataUrl1, function (data) {
         var processedData = retreiveData(data.sharesList);
         plot(processedData[0]);
