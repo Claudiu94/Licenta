@@ -9,9 +9,23 @@ html
 		script(src='https://code.highcharts.com/stock/modules/exporting.js')
 		script(type='application/javascript', src='/javascripts/theme.js')
 		script(type='application/javascript', src='/javascripts/details.js')
+		link(rel='stylesheet', href='/stylesheets/details.css', type='text/css')
 
 	body
 		include navigation
 		section#content       
 			#container
+			.alert-part
+				button.button-class.button1.create-btn
+					| Create new alert
+				p.set-part Set alert on price
+				select.select-style.set-part
+					option bigger
+					option smaller
+				p.set-part than
+				input.text.set-part(type='text')
+				button.button-class.button1.set-btn.set-part
+					| Set alert
+				button.button-class.button1.cancel-btn.set-part
+					| Cancel	
 			include news

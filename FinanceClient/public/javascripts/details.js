@@ -41,6 +41,16 @@ $(document).ready(function() {
     //     });
     // });
     plot();
+
+    $('.create-btn').click(function() {
+        $('.set-part').css('display', 'inline-block');
+        $('.create-btn').css('display', 'none');
+    })
+
+    $('.cancel-btn').click(function() {
+        $('.set-part').css('display', 'none');
+        $('.create-btn').css('display', 'inline-block');
+    })
 });
 
 function plot() {
