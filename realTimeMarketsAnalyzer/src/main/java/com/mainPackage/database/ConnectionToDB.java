@@ -246,6 +246,28 @@ public class ConnectionToDB {
         template.execute(sqlQuery1);
     }
 
+    public boolean addNotification(int userId, int type, String symbol, String price) {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        Object[] params = new Object[] {userId, type, symbol, price};
+        int[] types = new int[] { Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR};
+        String sqlQuery = new StringBuilder()
+                .append("insert into Notifications(PersonId, Type, Symbol, Price) values(?,?,?,?)")
+                .toString();
+
+        return template.update(sqlQuery, params, types) > 0;
+    }
+
+
+    public void deleteNotification(int userId, String symbol) {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        String sqlQuery = new StringBuilder().append("delete from Notifications where PersonId=")
+                .append(userId)
+                .append(" and Symbol=\"" + symbol + "\"")
+                .toString();
+
+        template.execute(sqlQuery);
+    }
+
     public static DriverManagerDataSource getDataSource() {
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();

@@ -5,6 +5,7 @@ var name = getParameterByName("name", url);
 var dataUrl = "http://localhost:8080/history?symbol=";
 var seriesCounter = 0;
 var symbols = [sym];
+var username = null;
 
 $(document).ready(function() {
     var localObj = JSON.parse($("#myLocalDataObj").val());
@@ -12,6 +13,7 @@ $(document).ready(function() {
     if (sym == null) {
         symbols = ["AAPL"];
         name = "Apple Inc.";
+        sym = "AAPL";
     }
     // $.getJSON(dataUrl, function (data) {
     //     // Create the chart
@@ -41,13 +43,33 @@ $(document).ready(function() {
     //     });
     // });
     plot();
+    username = document.getElementById("user");
 
     $('.create-btn').click(function() {
         $('.set-part').css('display', 'inline-block');
         $('.create-btn').css('display', 'none');
+
     })
 
     $('.cancel-btn').click(function() {
+        $('.set-part').css('display', 'none');
+        $('.create-btn').css('display', 'inline-block');
+    })
+
+    $('.set-btn').click(function() {
+        var url = "http://localhost:8080/create-notification?user="
+        var type = $('.select-style').val() == 'smaller' ? -1 : 1;
+
+        if (username != null) {
+            url += username.innerHTML;
+            url += "&type=" + type + "&symbol=" + sym + "&price=" + $('.text').val();
+            console.log(url)
+            $.getJSON(url, function(data) {
+                if (data == true)
+                    $('.alert-info').show();
+            })
+        }
+
         $('.set-part').css('display', 'none');
         $('.create-btn').css('display', 'inline-block');
     })

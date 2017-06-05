@@ -286,6 +286,19 @@ public class RestControllerServices {
     return true;
   }
 
+  @RequestMapping(value = "/create-notification", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+  @ResponseBody
+  @CrossOrigin(origins = "http://localhost:3000")
+  public boolean createNotification(@RequestParam(value="user", defaultValue="Claudiu_94") String user,
+                                       @RequestParam(value="symbol") String symbol,
+                                       @RequestParam(value="type") int type,
+                                       @RequestParam(value="price") String price) {
+
+    if (user == null || symbol == null || price == null)
+      return false;
+
+    return connectionToDB.addNotification(connectionToDB.getId(user), type, symbol, price);
+  }
 //  Share getShare(String symbol) {
 //    return shareList.stream()
 //            .filter(share -> share.getName().equals(symbol))

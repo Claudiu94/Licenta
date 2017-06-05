@@ -34,7 +34,7 @@ public class ConnectionDBTest {
 
 //    @Test
 //    public void testNextId() {
-//        System.out.println(connectionToDB.getNextId());
+//        connectionToDB.deleteNotification(1, "GOOG");
 //    }
 //
 //    @Test
