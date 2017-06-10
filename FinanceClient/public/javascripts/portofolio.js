@@ -4,12 +4,11 @@ var portofoliosUrl= "http://localhost:8080/portofolioNames?name=";
 
 $(document).ready(function() {
     username = document.getElementById("user");
-
     if (username != null) {
-        dataUrl += username.innerHTML;
-        portofoliosUrl += username.innerHTML;
+        dataUrl += username.innerText;
+        portofoliosUrl += username.innerText;
     }
-
+    console.log(portofoliosUrl);
     $.getJSON(portofoliosUrl, function(data) {
         addPortofolios(data);
     })
@@ -24,7 +23,7 @@ $(document).ready(function() {
         else {
             var url = "http://localhost:8080/create-portofolio?user="
             if (username != null)
-                url += username.innerHTML;
+                url += username.innerText;
             url += "&portofolioName=" + $('.pname').val();
 
             $.getJSON(url, function(data) {
@@ -49,7 +48,7 @@ function deletePortofolio() {
     var url = "http://localhost:8080/delete-portofolio?user="
     
     if (username != null)
-        url += username.innerHTML;
+        url += username.innerText;
 
     url += "&portofolioName=" + $('.select-style').val();
     $.getJSON(url, function(data) {
@@ -138,9 +137,9 @@ function populateTable(processedData) {
     var postLink = "http://localhost:8080/sellBuyShares";
 
     $('.results').children().eq(1).empty()
-    // console.log(username.innerHTML);
+    // console.log(username.innerText);
     if (username != null)
-        postLink = postLink + "/" + username.innerHTML;
+        postLink = postLink + "/" + username.innerText;
     else
         postLink = postLink + "/Claudiu_94";    
 

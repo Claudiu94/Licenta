@@ -1,14 +1,22 @@
 link(rel='stylesheet', href='/stylesheets/navigation.css', type='text/css')
+link(href='/stylesheets/additional-css/bootstrap-combined.no-icons.min.css', rel='stylesheet')
+link(href='/stylesheets/additional-css/font-awesome.css', rel='stylesheet')
 script(type='application/javascript', src='/javascripts/navigation.js')
 - local_data = JSON.stringify(session)
 		input(type='hidden', value=local_data)#myLocalDataObj
 		section#body.width
 			.navbar
 				- if (typeof session !== 'undefined' && typeof session.username !== 'undefined')
-					a#user(href='') #{session.username}
-					a(href='logout') Logout
+					a#user(href='')
+						i.icon-fixed-width.icon-user
+						| #{session.username}
+					a(href='logout')
+						i.icon-fixed-width.icon-signout
+						| Logout
 				- else
-					a(href='account') Sign In
+					a(href='account')
+						i.icon-fixed-width.icon-signin
+						| Sign In
 			aside#sidebar.column-left
 				header
 					h1
@@ -22,12 +30,22 @@ script(type='application/javascript', src='/javascripts/navigation.js')
 				nav#mainnav
 					ul
 						li#home.selected-item
-							a(href='/home') Home
+							a(href='/home')
+								i.icon-fixed-width.icon-home
+								| Home
 						li#portofolio
-							a(href='/portofolio') Portofolio
+							a(href='/portofolio')
+								i.icon-fixed-width.icon-bar-chart
+								| Portofolio
 						li#details
-							a(href='details') Company Details
+							a(href='details')
+								i.icon-fixed-width.icon-expand
+								| Company Details
 						li
-							a(href='news') News
+							a(href='news')
+								i.icon-fixed-width.icon-rss
+								| News
 						li
-							a(href='#') Contact
+							a(href='#') 
+								i.icon-fixed-width.icon-list-alt
+								| Contact
