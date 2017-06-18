@@ -2,22 +2,23 @@ p {
 	line-height: 2em;
 	margin-bottom: 20px;
 	font-size: 27px;
-	color: green;
+	color: #26a69a;
 	display: inline-block;
 }
 
 .select-style {
-    border: 2px solid #4caf50;
+    border: 2px solid #26a69a;
     width: 25%;
     border-radius: 3px;
     overflow: hidden;
     text-align: center;
     margin-left: 10px;
     display: inline-block;
-    font-size: 23px;
+    font-size: 20px;
     background: #fafafa no-repeat 90% 50%;
     outline: none;
     padding-bottom: 6px;
+    height: 40px;
 }
 
 
@@ -36,10 +37,10 @@ p {
 .button1 {
     background-color: white; 
     color: black; 
-    border: 2px solid #4CAF50;
+    border: 2px solid #26a69a;
 }
 
 .button1:hover {
-    background-color: #4CAF50;
+    background-color: #26a69a;
     color: white;
 }

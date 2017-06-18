@@ -1,5 +1,6 @@
 .alert-part {
-	margin: 50px auto;
+	margin-top: 30px;
+    margin-bottom: 30px;
 	max-width: 1000px;
 	min-width: 310px;
 	margin-bottom: 50px;
@@ -33,7 +34,7 @@ p {
 	line-height: 2em;
 	margin-bottom: 20px;
 	font-size: 27px;
-	color: green;
+	color: #26a69a;
 }
 
 .select-style {
@@ -42,11 +43,11 @@ p {
     overflow: hidden;
     text-align: center;
     margin-left: 10px;
-    font-size: 16px;
+    font-size: 20px;
     background: #fafafa no-repeat 90% 50%;
     outline: none;
-    padding: 16px 32px;
     margin-right: 10px;
+    height: 50px;
 }
 
 .text {

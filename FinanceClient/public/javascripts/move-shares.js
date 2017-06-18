@@ -16,7 +16,7 @@ $(document).ready(function() {
 	username = document.getElementById("user");
 
     if (username != null) {
-        portofoliosUrl += username.innerHTML;
+        portofoliosUrl += username.innerText;
     }
 
 	$.getJSON(portofoliosUrl, function(data) {
@@ -38,7 +38,7 @@ function addPortofolios(portofolios, from, shares, symbol) {
     $('.move').click(function() {
     	var url = "http://localhost:8080/move-shares?name=";
     	if (username != null)
-    		url += username.innerHTML + "&from=" + from + "&to=" + $('.select-style').val()
+    		url += username.innerText + "&from=" + from + "&to=" + $('.select-style').val()
     		+ "&symbol=" + symbol + "&shares=" + shares;
 
     	// console.log(url);

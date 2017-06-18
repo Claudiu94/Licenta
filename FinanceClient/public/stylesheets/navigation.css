@@ -194,7 +194,7 @@ section#body {
 
 /** content+sidebar styles **/
 section#content {
-	margin-left: 250px;
+	margin-left: 280px;
 	padding: 20px;
 	margin-top: 100px;
 }
@@ -265,9 +265,8 @@ nav#mainnav li a {
 
 #container {
 	min-width: 310px;
-	max-width: 1000px;
+	max-width: 1150px;
 	height: 600px;
-	margin: 0 auto;
 	background-color: #fff;
 }
 

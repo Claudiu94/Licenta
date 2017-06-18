@@ -10,7 +10,7 @@ $(document).ready(function(){
         date,
         rate,
         index;
-
+    // console.log(data);
     startDate.setMonth(startDate.getMonth() - 3); // a quarter of a year before last data point
     startPeriod = Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
 

@@ -78,7 +78,6 @@ $(document).ready(function() {
 function plot() {
     $.each(symbols, function (i, sym) {
         $.getJSON(dataUrl + sym, function (data) {
-
             seriesOptions[i] = {
                 name: sym,
                 data: data,
@@ -96,12 +95,53 @@ function plot() {
             // As we're loading the data asynchronously, we don't know what order it will arrive. So
             // we keep a counter and create the chart when all the data is loaded.
             seriesCounter += 1;
+            var smaData = calculateSMA(data);
+            i += 1;
+            // console.log(data)
+            // console.log(data.length)
 
-            if (seriesCounter === symbols.length) {
-                createChart();
-            }
+            seriesOptions[i] = {
+                name: 'Simple Moving Average',
+                data: smaData,
+                marker: {
+                    enabled: true,
+                    radius: 3
+                },
+                shadow: true,
+                tooltip: {
+                    valueDecimals: 2,
+                    style: {fontSize: '11pt'}
+                }
+            };
+
+            createChart();
         });
     });
+}
+
+function calculateSMA(data) {
+    var smaData = [];
+    var sum = 0;
+    for (i = 0; i < 9; i++) {
+        sum += data[i][1];
+        smaData[i] = data[i];
+    }
+
+    smaData[8] = []
+    smaData[8][0] = data[8][0];
+    smaData[8][1] = sum / 9;
+
+    for (i = 9; i < data.length; i++) {
+        sum = sum - data[i - 9][1] + data[i][1];
+        smaData[i] = [];
+        smaData[i][0] = data[i][0];
+        smaData[i][1] = sum / 9;
+    }
+    
+    // console.log(smaData)
+    // console.log(smaData.length)
+    
+    return smaData;
 }
 
 function getParameterByName(name, url) {

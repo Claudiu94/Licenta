@@ -67,7 +67,7 @@ router.get('/error', function(req, res, next) {
 });
 
 router.get('/news', function(req, res, next) {
-	res.render('news', {'session': req.session})
+	res.render('news-section', {'session': req.session})
 });
 
 router.get('/move-shares', function(req, res, next) {

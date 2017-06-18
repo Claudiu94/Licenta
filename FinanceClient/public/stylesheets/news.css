@@ -7,9 +7,19 @@
 	height: 220px;
 }
 .owl-item .item {
-	margin-top: 44%;
+	margin-top: 35%;
+	text-align: center;
+	display: inline-block;
 }
 
 .owl-item .item h4 {
 	text-align: center;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
 }

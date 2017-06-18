@@ -40,7 +40,7 @@ $(document).ready(function() {
     })
 
     $('.delete-btn').click(function() {
-        deletePortofolio();
+        // deletePortofolio();
     })
 });
 
