@@ -94,13 +94,26 @@ function renderOilChart() {
         var timestamps = json.chart.result[0].timestamp;
         var values = json.chart.result[0].indicators.quote[0].high;
         var finalValues = [];
+        var defaultValue;
 
+        for (i = 0; i < values.length; i++) {
+            if(values[i] != null || values[i] != "") {
+                defaultValue = values[i];
+                break;
+            }
+        }
         for (i = 0; i < values.length; i++) {
             finalValues[i] = [];
             finalValues[i][0] = timestamps[i] * 1000;
-            finalValues[i][1] = values[i];
+            if (values[i] == null || values[i] == "") {
+                finalValues[i][1] = defaultValue
+            }
+            else {
+                finalValues[i][1] = values[i];
+                defaultValue = values[i];
+            }
         }
-        console.log(finalValues)
+        console.log(defaultValue)
         oilChart(finalValues);
     });
 }
@@ -114,7 +127,7 @@ function oilChart(data) {
         },
 
         title: {
-            text: 'Oil price'
+            text: 'Oil price(per baril)'
         },
 
         yAxis: {
@@ -124,7 +137,7 @@ function oilChart(data) {
         },
 
         series: [{
-            name: 'Oil price',
+            name: 'Price per baril',
             data: data,
             tooltip: {
                 valueDecimals: 4
