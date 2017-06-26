@@ -18,13 +18,11 @@
 -- INSERT INTO Users (PersonID, LastName, FirstName, Email, Username, Password)
 -- VALUES (3, 'Claudiu', 'Pop', 'email3@yahoo.com', 'user3', 'pass...');
 
-CREATE TABLE Shares (
-	PersonID int,
+CREATE TABLE Stocks (
 	Symbol varchar(255),
-	Name varchar(255),
-	Shares int,
-	CONSTRAINT FK_PersonId FOREIGN KEY (PersonID)
-    REFERENCES Users(PersonID)
+	CompanyName varchar(255),
+	Currency varchar(255),
+	Price varchar(255)
 );
 
 INSERT INTO Shares (PersonID, Symbol, Name, Shares)
@@ -35,3 +33,11 @@ VALUES(4, "GOOG", "Alphabet Inc.", 20);
 
 INSERT INTO Shares (PersonID, Symbol, Name, Shares)
 VALUES(4, "AMGN", "Amgen Inc.", 60);
+
+
+alter table Notifications add Email int;
+alter table Notifications add App int;
+update Notifications set Email=0;
+update Notifications set App=0;
+alter table Notifications add constraint fk_users foreign key (PersonId) references Users (PersonId);
+alter table Portofolios add constraint fk_users_portofolios foreign key (PersonId) references Users (PersonId);

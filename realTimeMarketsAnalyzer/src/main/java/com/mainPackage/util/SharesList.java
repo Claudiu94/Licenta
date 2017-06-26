@@ -7,6 +7,7 @@ import java.util.List;
  */
 public class SharesList {
     private List<Share> shareList;
+    private Share share;
 
     public SharesList(List<Share> shareList) {
         this.shareList = shareList;

@@ -89,7 +89,7 @@ public class Portofolios {
         return new SharesList(portofolioShares);
     }
 
-    public void invalidateortofoliosCache() {
+    public void invalidatePortofoliosCache() {
         cachedData.invalidateAll();
     }
 }

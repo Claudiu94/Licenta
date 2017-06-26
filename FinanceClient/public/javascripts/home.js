@@ -27,7 +27,21 @@ $(document).ready(function(){
             minRate = rate;
         }
     }
+    // exchangeRate(data, minRate, maxRate);
+    renderOilChart();
+    
+})
 
+	$(".table-row").click(function(e){
+		var id = e.target.parentNode.id;
+		var name = e.target.parentNode.children[1].innerHTML;
+		var url = "http://localhost:3000/details?symbol=" + id + "&name=" + name;
+		window.location.href = url;
+    });
+});
+
+function exchangeRate(data, minRate, maxRate) {
+    console.log(data);
     // Create the chart
     Highcharts.stockChart('container', {
 
@@ -68,14 +82,65 @@ $(document).ready(function(){
             tooltip: {
                 valueDecimals: 4
             }
-   		}]
-   	})
-})
+        }]
+    })
+}
 
-	$(".table-row").click(function(e){
-		var id = e.target.parentNode.id;
-		var name = e.target.parentNode.children[1].innerHTML;
-		var url = "http://localhost:3000/details?symbol=" + id + "&name=" + name;
-		window.location.href = url;
+function renderOilChart() {
+    var oilURL1 = "https://l1-query.finance.yahoo.com/v8/finance/chart/CL=F?period2="
+    var oilURL2 = Math.floor(Date.now() / 1000) + "&period1=1496448000&interval=1h&indicators=quote&includeTimestamps=true&includePrePost=true&events=div|split|earn&corsDomain=finance.yahoo.com"
+    var oilURL = oilURL1 + oilURL2;
+    $.getJSON("jsonfiles/oil.json", function(json) {
+        var timestamps = json.chart.result[0].timestamp;
+        var values = json.chart.result[0].indicators.quote[0].high;
+        var finalValues = [];
+
+        for (i = 0; i < values.length; i++) {
+            finalValues[i] = [];
+            finalValues[i][0] = timestamps[i] * 1000;
+            finalValues[i][1] = values[i];
+        }
+        console.log(finalValues)
+        oilChart(finalValues);
     });
-});
+}
+
+
+function oilChart(data) {
+   Highcharts.stockChart('container', {
+
+        rangeSelector: {
+            selected: 1
+        },
+
+        title: {
+            text: 'Oil price'
+        },
+
+        yAxis: {
+            title: {
+                text: 'Oil price'
+            },
+        },
+
+        series: [{
+            name: 'Oil price',
+            data: data,
+            tooltip: {
+                valueDecimals: 4
+            }
+        }]
+    })
+}
+
+function readTextFile(file, callback) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.overrideMimeType("application/json");
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function() {
+        if (rawFile.readyState === 4 && rawFile.status == "200") {
+            callback(rawFile.responseText);
+        }
+    }
+    rawFile.send(null);
+}

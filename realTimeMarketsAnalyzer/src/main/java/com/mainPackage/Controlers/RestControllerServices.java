@@ -31,6 +31,8 @@ public class RestControllerServices {
   StocksBrief stocksBrief;
   @Autowired
   Portofolios portofolios;
+  @Autowired
+  NotificationCron notificationCron;
 
   private String url = ":/localhost:3000/";
   private static final String template = "Hello, %s!";
@@ -226,7 +228,7 @@ public class RestControllerServices {
       return redirectView;
     }
 
-    portofolios.invalidateortofoliosCache();
+    portofolios.invalidatePortofoliosCache();
     redirectView.setUrl("http://localhost:3000/portofolio");
 
     return redirectView;
@@ -281,7 +283,7 @@ public class RestControllerServices {
       connectionToDB.saveShareRecord(userId, sym, stocksBrief.retreiveNameForSymbol(sym), shares, to);
     }
 
-    portofolios.invalidateortofoliosCache();
+    portofolios.invalidatePortofoliosCache();
 
     return true;
   }
