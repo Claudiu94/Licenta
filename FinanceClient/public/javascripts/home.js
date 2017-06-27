@@ -1,3 +1,4 @@
+var dataUrl = "http://localhost:8080/history?symbol=";
 $(document).ready(function(){
 	var localObj = JSON.parse($("#myLocalDataObj").val());
 
@@ -89,32 +90,36 @@ function exchangeRate(data, minRate, maxRate) {
 function renderOilChart() {
     var oilURL1 = "https://l1-query.finance.yahoo.com/v8/finance/chart/CL=F?period2="
     var oilURL2 = Math.floor(Date.now() / 1000) + "&period1=1496448000&interval=1h&indicators=quote&includeTimestamps=true&includePrePost=true&events=div|split|earn&corsDomain=finance.yahoo.com"
-    var oilURL = oilURL1 + oilURL2;
-    $.getJSON("jsonfiles/oil.json", function(json) {
-        var timestamps = json.chart.result[0].timestamp;
-        var values = json.chart.result[0].indicators.quote[0].high;
-        var finalValues = [];
-        var defaultValue;
+    var oilURL = dataUrl + "CL=F";
+    // $.getJSON("jsonfiles/oil.json", function(json) {
+    //     var timestamps = json.chart.result[0].timestamp;
+    //     var values = json.chart.result[0].indicators.quote[0].high;
+    //     var finalValues = [];
+    //     var defaultValue;
 
-        for (i = 0; i < values.length; i++) {
-            if(values[i] != null || values[i] != "") {
-                defaultValue = values[i];
-                break;
-            }
-        }
-        for (i = 0; i < values.length; i++) {
-            finalValues[i] = [];
-            finalValues[i][0] = timestamps[i] * 1000;
-            if (values[i] == null || values[i] == "") {
-                finalValues[i][1] = defaultValue
-            }
-            else {
-                finalValues[i][1] = values[i];
-                defaultValue = values[i];
-            }
-        }
-        console.log(defaultValue)
-        oilChart(finalValues);
+    //     for (i = 0; i < values.length; i++) {
+    //         if(values[i] != null || values[i] != "") {
+    //             defaultValue = values[i];
+    //             break;
+    //         }
+    //     }
+    //     for (i = 0; i < values.length; i++) {
+    //         finalValues[i] = [];
+    //         finalValues[i][0] = timestamps[i] * 1000;
+    //         if (values[i] == null || values[i] == "") {
+    //             finalValues[i][1] = defaultValue
+    //         }
+    //         else {
+    //             finalValues[i][1] = values[i];
+    //             defaultValue = values[i];
+    //         }
+    //     }
+    //     console.log(defaultValue)
+    //     oilChart(finalValues);
+    // });
+    
+    $.getJSON(oilURL, function (data) {
+        oilChart(data);
     });
 }
 

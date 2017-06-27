@@ -61,7 +61,7 @@ $(document).ready(function() {
         var type = $('.select-style').val() == 'smaller' ? -1 : 1;
 
         if (username != null) {
-            url += username.innerHTML;
+            url += username.innerText;
             url += "&type=" + type + "&symbol=" + sym + "&price=" + $('.text').val();
             console.log(url)
             $.getJSON(url, function(data) {

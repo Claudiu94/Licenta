@@ -58,4 +58,24 @@ public class StocksBrief {
 
     return symbol != null ? symbol.getCompanyName() : null;
   }
+
+  public float retreivePriceForSymbol(String symName) {
+
+    Symbol symbol = symbols.stream()
+            .filter(sym -> sym.getSymbol().equals(symName))
+            .findFirst()
+            .orElse(null);
+
+    return symbol != null ? symbol.getPrice() : -1;
+  }
+
+  public String retreiveCurrencyForSymbol(String symName) {
+
+    Symbol symbol = symbols.stream()
+            .filter(sym -> sym.getSymbol().equals(symName))
+            .findFirst()
+            .orElse(null);
+
+    return symbol != null ? symbol.getCurrency() : "USD";
+  }
 }

@@ -29,7 +29,8 @@ public class ConnectionDBTest {
 
 //    @Test
 //    public void test() {
-//        connectionToDB.deletePortofolio(5, "New Portofolio");
+//        connectionToDB.getAlerts(4);
+//
 //    }
 
 //    @Test

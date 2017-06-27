@@ -154,6 +154,21 @@ public class ConnectionToDB {
         return -1;
     }
 
+    public String getEmail(int id) {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        String sqlQuery = new StringBuilder().append("select Email from Users where PersonID=")
+                .append("\"" + id + "\"").toString();
+
+        List<Map<String, Object>> rows = template.queryForList(sqlQuery);
+
+        if (rows.size() == 1) {
+            Map<String, Object> row = rows.get(0);
+
+            return (String) row.get(EMAIL);
+        }
+        return null;
+    }
+
     public List<Map<String, Object>> getShares(int userId) {
 
         JdbcTemplate template = new JdbcTemplate(getDataSource());
@@ -248,10 +263,10 @@ public class ConnectionToDB {
 
     public boolean addNotification(int userId, int type, String symbol, String price) {
         JdbcTemplate template = new JdbcTemplate(getDataSource());
-        Object[] params = new Object[] {userId, type, symbol, price};
-        int[] types = new int[] { Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR};
+        Object[] params = new Object[] {userId, type, symbol, price, 1, 1};
+        int[] types = new int[] { Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER};
         String sqlQuery = new StringBuilder()
-                .append("insert into Notifications(PersonId, Type, Symbol, Price) values(?,?,?,?)")
+                .append("insert into Notifications(PersonId, Type, Symbol, Price, Email, App) values(?,?,?,?,?,?)")
                 .toString();
 
         return template.update(sqlQuery, params, types) > 0;
@@ -261,6 +276,47 @@ public class ConnectionToDB {
     public void deleteNotification(int userId, String symbol) {
         JdbcTemplate template = new JdbcTemplate(getDataSource());
         String sqlQuery = new StringBuilder().append("delete from Notifications where PersonId=")
+                .append(userId)
+                .append(" and Symbol=\"" + symbol + "\"")
+                .toString();
+
+        template.execute(sqlQuery);
+    }
+
+    public List<Map<String, Object>> getAlerts(int userId) {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        List<String> portofolios = new ArrayList<>();
+        String sqlQuery = new StringBuilder()
+                .append("select Type, Symbol, Price, Email, App from Notifications where PersonId=")
+                .append(userId)
+                .toString();
+
+        return template.queryForList(sqlQuery);
+    }
+
+    public List<Map<String, Object>> getAllAlerts() {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        List<String> portofolios = new ArrayList<>();
+        String sqlQuery = new StringBuilder()
+                .append("select * from Notifications where Email != 0")
+                .toString();
+
+        return template.queryForList(sqlQuery);
+    }
+
+    public void emailSent(int userId, String symbol) {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        String sqlQuery = new StringBuilder().append("update Notifications set Email=0 where PersonId=")
+                .append(userId)
+                .append(" and Symbol=\"" + symbol + "\"")
+                .toString();
+
+        template.execute(sqlQuery);
+    }
+
+    public void appNotificationSent(int userId, String symbol) {
+        JdbcTemplate template = new JdbcTemplate(getDataSource());
+        String sqlQuery = new StringBuilder().append("update Notifications set App=0 where PersonId=")
                 .append(userId)
                 .append(" and Symbol=\"" + symbol + "\"")
                 .toString();
