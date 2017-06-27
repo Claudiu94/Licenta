@@ -59,14 +59,19 @@ public class RestControllerServices {
 
     Calendar from = Calendar.getInstance();
     from.add(Calendar.YEAR, -2);
-    Stock appl = YahooFinance.get(symbol, from, Interval.DAILY);
+    Stock stock = YahooFinance.get(symbol, from, Interval.DAILY);
     JSONArray list = new JSONArray();
+    float lastValue = stock.getQuote().getPrice().floatValue();
 
-    for (HistoricalQuote quote : appl.getHistory()) {
+    for (HistoricalQuote quote : stock.getHistory()) {
       JSONArray l = new JSONArray();
 //      System.out.println(quote.getDate().toInstant().getEpochSecond() * 1000);
       l.add(quote.getDate().toInstant().getEpochSecond() * 1000);
-      l.add(quote.getClose().floatValue());
+
+      if (quote.getClose() != null) {
+        lastValue = quote.getClose().floatValue();
+      }
+      l.add(lastValue);
       list.add(l);
     }
 

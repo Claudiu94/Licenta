@@ -34,7 +34,7 @@ router.get('/home', function(req, res, next) {
 router.get('/account', function(req, res, next) {
 	console.log(req.session);
 	if (req.session.cookie.originalMaxAge < 0)
-		req.session.cookie.originalMaxAge = 316000;
+		req.session.cookie.originalMaxAge = 1006000;
 
 	res.render('account', {'session': req.session})
 });
