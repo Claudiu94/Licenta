@@ -9,7 +9,8 @@ var titleValues = {
     "RONUSD=X": "RON to USD Exchange Rate History",
     "EURRON=X": "EUR to RON Exchange Rate History",
     "RONEUR=X": "RON to EUR Exchange Rate History"
-}
+};
+var buttonsAdded = false;
 
 $(document).ready(function(){
 	var localObj = JSON.parse($("#myLocalDataObj").val());
@@ -62,75 +63,105 @@ function createUrlAndRender(symbol) {
 }
 
 function addMenuButtons() {
-    Highcharts.getOptions().exporting.buttons.contextButton.menuItems.push(
-        {
-            text: 'Gold',
-            onclick: function () {
-                createUrlAndRender("GC=F")
-            }
-        },
+    
+    if (!buttonsAdded) {
+        Highcharts.getOptions().exporting.buttons.contextButton.menuItems.push(
+            {
+                text: 'Gold',
+                onclick: function () {
+                    createUrlAndRender("GC=F")
+                }
+            },
 
-        {
-            text: 'Silver',
-            onclick: function () {
-                createUrlAndRender("SI=F")
-            }
-        },
+            {
+                text: 'Silver',
+                onclick: function () {
+                    createUrlAndRender("SI=F")
+                }
+            },
 
-        {
-            text: 'Oil',
-            onclick: function () {
-                createUrlAndRender("CL=F")
-            }
-        },
+            {
+                text: 'Oil',
+                onclick: function () {
+                    createUrlAndRender("CL=F")
+                }
+            },
 
-        {
-            text: 'USD/EUR',
-            onclick: function () {
-                createUrlAndRender("USDEUR=X")
-            }
-        },
+            {
+                text: 'USD/EUR',
+                onclick: function () {
+                    createUrlAndRender("USDEUR=X")
+                }
+            },
 
-        {
-            text: 'EUR/USD',
-            onclick: function () {
-                createUrlAndRender("EURUSD=X")
-            }
-        },
+            {
+                text: 'EUR/USD',
+                onclick: function () {
+                    createUrlAndRender("EURUSD=X")
+                }
+            },
 
-        {
-            text: 'USD/RON',
-            onclick: function () {
-                createUrlAndRender("USDRON=X")
-            }
-        },
+            {
+                text: 'USD/RON',
+                onclick: function () {
+                    createUrlAndRender("USDRON=X")
+                }
+            },
 
-        {
-            text: 'RON/USD',
-            onclick: function () {
-                createUrlAndRender("RONUSD=X")
-            }
-        },
+            {
+                text: 'RON/USD',
+                onclick: function () {
+                    createUrlAndRender("RONUSD=X")
+                }
+            },
 
-        {
-            text: 'EUR/RON',
-            onclick: function () {
-                createUrlAndRender("EURRON=X")
-            }
-        },
+            {
+                text: 'EUR/RON',
+                onclick: function () {
+                    createUrlAndRender("EURRON=X")
+                }
+            },
 
-        {
-            text: 'RON/EUR',
-            onclick: function () {
-                createUrlAndRender("RONEUR=X")
-            }
-        },
+            {
+                text: 'RON/EUR',
+                onclick: function () {
+                    createUrlAndRender("RONEUR=X")
+                }
+            },
 
-    );
+        );
+        buttonsAdded = true;
+    }
 }
 
 function renderChart(data, symbol) {
     // console.log(titleValues[symbol]);
+
+    var startDate = new Date(data[data.length - 1][0]), // Get year of last data point
+            minRate = data[data.length - 1][1],
+            maxRate = minRate,
+            startPeriod,
+            date,
+            rate,
+            index;
+        // console.log(data);
+    startDate.setMonth(startDate.getMonth() - 3); // a quarter of a year before last data point
+    startPeriod = Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+
+    for (index = data.length - 1; index >= 0; index = index - 1) {
+        date = data[index][0]; // data[i][0] is date
+        rate = data[index][1]; // data[i][1] is exchange rate
+        if (date < startPeriod) {
+            break; // stop measuring highs and lows
+        }
+        if (rate > maxRate) {
+            maxRate = rate;
+        }
+        if (rate < minRate) {
+            minRate = rate;
+        }
+    }
+    // Create the chart
     Highcharts.stockChart('container', {
 
         events: {
@@ -149,6 +180,23 @@ function renderChart(data, symbol) {
             title: {
                 text: titleValues[symbol]
             },
+            plotLines: [{
+                value: minRate,
+                color: 'green',
+                dashStyle: 'shortdash',
+                width: 2,
+                label: {
+                    text: 'Last quarter minimum'
+                }
+            }, {
+                value: maxRate,
+                color: 'red',
+                dashStyle: 'shortdash',
+                width: 2,
+                label: {
+                    text: 'Last quarter maximum'
+                }
+            }]
         },
 
         series: [{
