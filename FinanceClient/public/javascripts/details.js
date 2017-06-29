@@ -1,4 +1,4 @@
-var seriesOptions = []. smaData, bbUpperBand, bbLowerBand;
+var seriesOptions = [], smaData = [], bbUpperBand = [], bbLowerBand = [];
 var url = window.location.href;
 var sym = getParameterByName("symbol", url);
 var name = getParameterByName("name", url);
@@ -6,6 +6,8 @@ var dataUrl = "http://localhost:8080/history?symbol=";
 var seriesCounter = 0;
 var symbols = [sym];
 var username = null;
+var buttonsAdded = false;
+var sData, sma, upbb, lbb;
 
 $(document).ready(function() {
     var localObj = JSON.parse($("#myLocalDataObj").val());
@@ -78,9 +80,13 @@ $(document).ready(function() {
 function plot() {
     $.each(symbols, function (i, sym) {
         $.getJSON(dataUrl + sym, function (data) {
-            seriesOptions[i] = {
+            sData = {
                 name: sym,
+                color: '#f90000',
                 data: data,
+                type: 'area',
+                threshold: null,
+                // fillColor: 'rgba(249, 0, 0, 0.2)',
                 marker: {
                     enabled: true,
                     radius: 3
@@ -89,20 +95,47 @@ function plot() {
                 tooltip: {
                     valueDecimals: 2,
                     style: {fontSize: '11pt'}
+                },
+
+                fillColor: {
+                    linearGradient: {
+                        x1: 0,
+                        y1: 0,
+                        x2: 0,
+                        y2: 1
+                    },
+                    stops: [
+                        [0, Highcharts.getOptions().colors[1]],
+                        [1, Highcharts.Color(Highcharts.getOptions().colors[1]).setOpacity(0).get('rgba')]
+                    ]
                 }
             };
 
             // As we're loading the data asynchronously, we don't know what order it will arrive. So
             // we keep a counter and create the chart when all the data is loaded.
             seriesCounter += 1;
-            smaData = calculateSMA(data);
-            i += 1;
-            // console.log(data)
-            // console.log(data.length)
+            calculateSMA(data);
+            calculateBB(data);
 
-            seriesOptions[i] = {
+            sma = {
                 name: 'Simple Moving Average',
                 data: smaData,
+                color: '#4292f4',
+                marker: {
+                    enabled: true,
+                    radius: 3
+                },
+                shadow: true,
+                tooltip: {
+                    valueDecimals: 2,
+                    style: {fontSize: '11pt'}
+                },
+            };
+
+            lbb = {
+                name: 'Lower BB',
+                color: '#41f485',
+                data: bbLowerBand,
                 marker: {
                     enabled: true,
                     radius: 3
@@ -113,6 +146,23 @@ function plot() {
                     style: {fontSize: '11pt'}
                 }
             };
+
+            upbb = {
+                name: 'Upper BB',
+                color: '#f4b241',
+                data: bbUpperBand,
+                marker: {
+                    enabled: true,
+                    radius: 3
+                },
+                shadow: true,
+                tooltip: {
+                    valueDecimals: 2,
+                    style: {fontSize: '11pt'}
+                }
+            };
+
+            seriesOptions = [sData, sma]
 
             createChart();
         });
@@ -120,28 +170,37 @@ function plot() {
 }
 
 function calculateSMA(data) {
-    var smaData = [];
     var sum = 0;
-    for (i = 0; i < 9; i++) {
+    for (i = 0; i < 20; i++) {
         sum += data[i][1];
         smaData[i] = data[i];
     }
 
-    smaData[8] = []
-    smaData[8][0] = data[8][0];
-    smaData[8][1] = sum / 9;
+    smaData[19] = []
+    smaData[19][0] = data[19][0];
+    smaData[19][1] = sum / 20;
 
-    for (i = 9; i < data.length; i++) {
-        sum = sum - data[i - 9][1] + data[i][1];
+    for (i = 20; i < data.length; i++) {
+        sum = sum - data[i - 20][1] + data[i][1];
         smaData[i] = [];
         smaData[i][0] = data[i][0];
-        smaData[i][1] = sum / 9;
+        smaData[i][1] = sum / 20;
     }
-    
-    // console.log(smaData)
-    // console.log(smaData.length)
-    
-    return smaData;
+}
+
+function calculateBB(data) {
+    var j = 0;
+    for(i = 0; i < data.length; i++) {
+        bbLowerBand[j] = [];
+        bbUpperBand[j] = [];
+        bbLowerBand[j][0] = data[i][0]
+        bbUpperBand[j][0] = data[i][0]
+
+        var diff = Math.abs(data[i][1] - smaData[i][1]) * 2;
+        bbLowerBand[j][1] = smaData[i][1] - diff;
+        bbUpperBand[j][1] = smaData[i][1] + diff;
+        j++;
+    }
 }
 
 function getParameterByName(name, url) {
@@ -157,6 +216,10 @@ function getParameterByName(name, url) {
 function createChart() {
 
     var chart = Highcharts.stockChart('container', {
+
+        events: {
+            load: addMenuButtons()
+        },
 
         rangeSelector: {
             selected: 4
@@ -175,7 +238,7 @@ function createChart() {
         yAxis: {
             labels: {
                 formatter: function () {
-                    return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                    return '$' + this.value;
                 }
             },
             plotLines: [{
@@ -187,13 +250,13 @@ function createChart() {
 
         plotOptions: {
             series: {
-                compare: 'percent',
-                showInNavigator: true
+                // compare: 'percent',
+                showInNavigator: true,
             }
         },
 
         tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+            // pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
             valueDecimals: 2,
             split: true,
             style: {fontSize: '11pt'}
@@ -203,4 +266,54 @@ function createChart() {
     });
 }
 
+
+function addMenuButtons() {
+    if (!buttonsAdded) {
+        Highcharts.getOptions().exporting.buttons.contextButton.menuItems.push(
+            {
+                text: 'Simple Moving Average',
+                onclick: function () {
+                    if (seriesOptions.length == 3 || seriesOptions.length == 1) {
+                        seriesOptions.push(sma)
+                    }
+                    else {
+                        var index = seriesOptions.indexOf(sma)
+                        seriesOptions = removeAtIndex(index, seriesOptions);
+                        console.log(seriesOptions);
+                    }
+                    createChart();
+                }
+            },
+
+            {
+                text: 'Bollinger Bands',
+                onclick: function () {
+                    if (seriesOptions.length <= 2) {
+                        seriesOptions.push(lbb);
+                        seriesOptions.push(upbb);
+                    }
+                    else {
+                        var index = seriesOptions.indexOf(lbb);
+                        seriesOptions = removeAtIndex(index, seriesOptions);
+                        seriesOptions = removeAtIndex(index, seriesOptions);
+                    }
+                    createChart();
+                }
+            }
+
+        );
+        buttonsAdded = true;
+    }
+}
+
+function removeAtIndex(index, data) {
+    var  j = 0, newData = [];
+
+    for (i = 0; i < data.length; i++) 
+       if (i != index) {
+            newData[j] = data[i];
+            j++;
+        }
+    return newData;
+}
 // https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?

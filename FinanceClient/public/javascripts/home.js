@@ -1,8 +1,8 @@
 var dataUrl = "http://localhost:8080/history?symbol=";
 var titleValues = {
-    "GC=F": "Gold (USD)",
-    "SI=F": "Silver (USD)",
-    "CL=F": "Oil(price per baril in USD)",
+    "GC=F": "Gold price in USD/oz (1oz = 28.35g)",
+    "SI=F": "Silver, price in USD/oz (1oz = 28.35g)",
+    "CL=F": "Oil (price in USD/baril)",
     "USDEUR=X": "USD to EUR Exchange Rate History",
     "EURUSD=X": "EUR to USD Exchange Rate History",
     "USDRON=X": "USD to RON Exchange Rate History",
@@ -10,6 +10,31 @@ var titleValues = {
     "EURRON=X": "EUR to RON Exchange Rate History",
     "RONEUR=X": "RON to EUR Exchange Rate History"
 };
+
+var yAxisValues = {
+    "GC=F": "USD",
+    "SI=F": "USD",
+    "CL=F": "USD",
+    "USDEUR=X": "EUR",
+    "EURUSD=X": "USD",
+    "USDRON=X": "RON",
+    "RONUSD=X": "USD",
+    "EURRON=X": "RON",
+    "RONEUR=X": "EUR"
+};
+
+var currencyValues = {
+    "GC=F": "$",
+    "SI=F": "$",
+    "CL=F": "$",
+    "USDEUR=X": "€",
+    "EURUSD=X": "$",
+    "USDRON=X": "LEI",
+    "RONUSD=X": "$",
+    "EURRON=X": "LEI",
+    "RONEUR=X": "€"
+};
+
 var buttonsAdded = false;
 
 $(document).ready(function(){
@@ -145,7 +170,7 @@ function renderChart(data, symbol) {
             rate,
             index;
         // console.log(data);
-    startDate.setMonth(startDate.getMonth() - 3); // a quarter of a year before last data point
+    startDate.setMonth(startDate.getMonth() - 24); // 2 years before last data point
     startPeriod = Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
 
     for (index = data.length - 1; index >= 0; index = index - 1) {
@@ -178,7 +203,16 @@ function renderChart(data, symbol) {
 
         yAxis: {
             title: {
-                text: titleValues[symbol]
+                text: yAxisValues[symbol]
+            },
+            labels: {
+                    formatter: function () {
+                        if (currencyValues[symbol] == "LEI") {
+                            return this.value + "LEI";
+                        }
+                        else
+                            return currencyValues[symbol] + this.value;
+                    }
             },
             plotLines: [{
                 value: minRate,
@@ -186,7 +220,7 @@ function renderChart(data, symbol) {
                 dashStyle: 'shortdash',
                 width: 2,
                 label: {
-                    text: 'Last quarter minimum'
+                    text: 'Minimum value'
                 }
             }, {
                 value: maxRate,
@@ -194,7 +228,7 @@ function renderChart(data, symbol) {
                 dashStyle: 'shortdash',
                 width: 2,
                 label: {
-                    text: 'Last quarter maximum'
+                    text: 'Maximum value'
                 }
             }]
         },
@@ -202,8 +236,23 @@ function renderChart(data, symbol) {
         series: [{
             name: symbol,
             data: data,
+            type: 'area',
+            threshold: null,
             tooltip: {
                 valueDecimals: 4
+            },
+
+             fillColor: {
+                linearGradient: {
+                    x1: 0,
+                    y1: 0,
+                    x2: 0,
+                    y2: 1
+                },
+                stops: [
+                    [0, Highcharts.getOptions().colors[0]],
+                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                ]
             }
         }]
     });
@@ -251,7 +300,12 @@ function exchangeRateDefaultRender() {
 
             yAxis: {
                 title: {
-                    text: 'Exchange rate'
+                    text: 'USD'
+                },
+                labels: {
+                    formatter: function () {
+                        return '$' + this.value;
+                    }
                 },
                 plotLines: [{
                     value: minRate,

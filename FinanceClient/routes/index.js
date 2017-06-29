@@ -74,4 +74,7 @@ router.get('/move-shares', function(req, res, next) {
 	res.render('move-shares', {'session': req.session})
 });
 
+router.get('/contact', function(req, res, next) {
+	res.render('contact', {'session': req.session})
+});
 module.exports = router;

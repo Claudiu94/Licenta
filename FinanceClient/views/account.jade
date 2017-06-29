@@ -16,18 +16,18 @@ html
       .login-page(name='first_div')
         .form(name='second_div')
           form.register-form(name='register-from', method='POST', action='http://localhost:8080/new-account')
-            input(type='text', name='first_name', placeholder='first name')
-            input(type='text', name='last_name', placeholder='last name')
-            input(type='text', name='username', placeholder='username')
-            input(type='password', name='password',  placeholder='password')
+            input(type='text', name='first_name', placeholder='first name', required='true')
+            input(type='text', name='last_name', placeholder='last name', required='true')
+            input(type='text', name='username', placeholder='username', required='true')
+            input(type='password', name='password',  placeholder='password', required='true')
             input(type='text', name='email_address', placeholder='email address')
             button create
             p.message
               | Already registered? 
               a(href='#') Sign In
           form.login-form(name='login-from', method='POST', action='http://localhost:8080/login')
-            input(type='text', name='username', placeholder='username')
-            input(type='password', name='password', placeholder='password')
+            input(type='text', name='username', placeholder='username', required='true')
+            input(type='password', name='password', placeholder='password', required='true')
             button login
             p.message
               | Not registered? 
