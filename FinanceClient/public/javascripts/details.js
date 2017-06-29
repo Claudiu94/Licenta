@@ -1,4 +1,4 @@
-var seriesOptions = [];
+var seriesOptions = []. smaData, bbUpperBand, bbLowerBand;
 var url = window.location.href;
 var sym = getParameterByName("symbol", url);
 var name = getParameterByName("name", url);
@@ -95,7 +95,7 @@ function plot() {
             // As we're loading the data asynchronously, we don't know what order it will arrive. So
             // we keep a counter and create the chart when all the data is loaded.
             seriesCounter += 1;
-            var smaData = calculateSMA(data);
+            smaData = calculateSMA(data);
             i += 1;
             // console.log(data)
             // console.log(data.length)

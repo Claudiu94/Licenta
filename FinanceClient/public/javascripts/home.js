@@ -127,7 +127,7 @@ function addMenuButtons() {
                 onclick: function () {
                     createUrlAndRender("RONEUR=X")
                 }
-            },
+            }
 
         );
         buttonsAdded = true;

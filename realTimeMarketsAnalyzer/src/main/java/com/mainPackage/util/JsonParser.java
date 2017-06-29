@@ -19,7 +19,7 @@ import javax.annotation.PostConstruct;
 
 public class JsonParser {
 
-    private static final String filePath = "/home/claudiu/workspace/Licenta/realTimeMarketsAnalyzer/Stock.json";
+    private static final String filePath = "/home/cozafiu/workspace/Licenta/realTimeMarketsAnalyzer/Stock.json";
     private ArrayList<String> symbolys;
 
     @PostConstruct
