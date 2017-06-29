@@ -20,6 +20,6 @@ a {
 	text-decoration: none;
 }
 
-a:hover {
+.item a:hover {
 	text-decoration: underline;
 }
