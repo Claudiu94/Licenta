@@ -89,3 +89,7 @@ form {
 .delete-btn {
     margin-top: 25px;
 }
+
+.highcharts-credits {
+    display: none;
+}

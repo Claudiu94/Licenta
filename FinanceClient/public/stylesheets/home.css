@@ -17,3 +17,7 @@
 .highcharts-menu .highcharts-menu-item {
     font-size: 13px !important;
 }
+
+.highcharts-credits {
+	display: none;
+}
