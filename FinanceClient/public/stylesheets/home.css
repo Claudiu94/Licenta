@@ -9,3 +9,11 @@
 .col-md-4, #price {
 	width: 13%;
 }
+
+.highcharts-menu hr {
+    display: none;
+}
+
+.highcharts-menu .highcharts-menu-item {
+    font-size: 13px !important;
+}

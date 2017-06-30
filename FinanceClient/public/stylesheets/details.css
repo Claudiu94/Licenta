@@ -72,3 +72,11 @@ p {
     margin-top: -30px;
     padding-top: 0px;
 }
+
+.highcharts-menu hr {
+    display: none;
+}
+
+.highcharts-menu .highcharts-menu-item {
+    font-size: 13px !important;
+}
