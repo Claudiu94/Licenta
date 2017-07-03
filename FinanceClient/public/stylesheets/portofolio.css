@@ -48,16 +48,16 @@ form {
 .button1 {
     background-color: white; 
     color: black; 
-    border: 2px solid #26a69a;
+    border: 2px solid #3583d6;
 }
 
 .button1:hover {
-    background-color: #26a69a;
+    background-color: #3583d6;
     color: white;
 }
 
 .select-style {
-    border: 2px solid #26a69a;
+    border: 2px solid #3583d6;
     width: 20%;
     border-radius: 3px;
     overflow: hidden;
@@ -71,7 +71,7 @@ form {
 }
 
 .pname {
-    border: 2px solid #26a69a;
+    border: 2px solid #3583d6;
     width: 25%;
     border-radius: 3px;
     overflow: hidden;

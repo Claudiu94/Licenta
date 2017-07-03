@@ -52,7 +52,7 @@ a {
 	font-size: 17px;
 }
 p.message a:hover, div.navbar a:hover {
-	color: lightseagreen !important;
+	color: #56a0ef !important;
 }
 a:focus {
 	outline:none;
@@ -75,7 +75,7 @@ a.button-reversed {
 }
 
 a.button:hover {
-	background-color: ##26a69a;
+	background-color: #3583d6;
 }
 
 a.button-reversed:hover {
@@ -230,11 +230,11 @@ nav#mainnav li.selected-item a,
 nav#mainnav li.selected-item a:hover {
 	color: #fff;
 	font-weight:bold;
-	background: #26a69a;
+	background: #3583d6;
 }
 nav#mainnav li:not(.selected-item) a:hover {
 	background-color: #fff;
-	color: #26a69a;
+	color: #3583d6;
 	text-decoration:none;
 }
 nav#mainnav li a {
@@ -322,4 +322,26 @@ nav#mainnav li a {
 
 
 	nav#mainnav ul li a { margin-top: 0; padding: 1em; }
+}
+
+.fa-globe {
+	position: relative;
+}
+
+.fa-globe .num {
+    background-color: red;
+    border-radius: 50%;
+    display: block;
+    font-family: Arial;
+    font-size: 12px;
+    font-weight: 600;
+    height: 12px;
+    left: 100%;
+    line-height: 1;
+    margin-left: -12px;
+    padding: 3px;
+    position: absolute;
+    text-align: center;
+    top: 5px;
+    width: 12px;
 }
