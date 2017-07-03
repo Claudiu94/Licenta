@@ -344,4 +344,5 @@ nav#mainnav li a {
     text-align: center;
     top: 5px;
     width: 12px;
+    box-sizing: content-box;
 }
