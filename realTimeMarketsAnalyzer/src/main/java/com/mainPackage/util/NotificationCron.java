@@ -43,9 +43,10 @@ public class NotificationCron {
                 String symbol = (String)map.get("Symbol");
                 float currentPrice = stocksBrief.retreivePriceForSymbol(symbol);
 
+
                 if (currentPrice != -1
-                    && (type == 1 && Float.valueOf(price) < currentPrice
-                        || type == -1 && Float.valueOf(price) > currentPrice)) {
+                        && ((type == 1 && Float.compare(Float.valueOf(price), currentPrice) == -1)
+                        || (type == -1 && Float.compare(Float.valueOf(price), currentPrice) == 1))) {
 
                     String message = type == 1 ? "bigger" : "smaller";
                     String company = stocksBrief.retreiveNameForSymbol(symbol);

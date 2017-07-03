@@ -40,7 +40,7 @@ var buttonsAdded = false;
 $(document).ready(function(){
 	var localObj = JSON.parse($("#myLocalDataObj").val());
 
-    createUrlAndRender("GC=F");
+    createUrlAndRender("USDEUR=X");
 
 	$(".table-row").click(function(e){
 		var id = e.target.parentNode.id;

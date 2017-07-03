@@ -85,6 +85,41 @@ public class RestControllerServices {
       return stocksBrief;
   }
 
+
+  @RequestMapping(value = "/notifications", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+  @CrossOrigin(origins = "http://localhost:3000")
+  @ResponseBody
+  public List<Alert> notifications(@RequestParam(value="user", required=true) String username) throws IOException {
+    List<Alert> alerts = new ArrayList<>();
+
+    if(username != null) {
+      int id = connectionToDB.getId(username);
+
+      if(id != -1) {
+        List<Map<String, Object>> data = connectionToDB.getAlerts(id);
+
+        for (Map<String, Object> map : data) {
+          String price = (String)map.get("Price");
+          int type = (Integer)map.get("Type");
+          String symbol = (String)map.get("Symbol");
+          float currentPrice = stocksBrief.retreivePriceForSymbol(symbol);
+          String company = stocksBrief.retreiveNameForSymbol(symbol);
+
+          if (currentPrice != -1
+                  && ((type == 1 && Float.compare(Float.valueOf(price), currentPrice) == -1)
+                  || (type == -1 && Float.compare(Float.valueOf(price), currentPrice) == 1))) {
+
+            String message = type == 1 ? "bigger" : "smaller";
+
+            alerts.add(new Alert(symbol, company, price, String.valueOf(currentPrice), message));
+          }
+        }
+      }
+    }
+
+    return alerts;
+  }
+
   @RequestMapping(value = "/login", method = RequestMethod.POST)
   public RedirectView login(HttpServletRequest request, @RequestBody String body) throws ParseException {
     System.out.println("LOGIN!!!!!!!!!!!");
