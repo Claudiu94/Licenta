@@ -279,7 +279,7 @@ function addMenuButtons() {
                     else {
                         var index = seriesOptions.indexOf(sma)
                         seriesOptions = removeAtIndex(index, seriesOptions);
-                        console.log(seriesOptions);
+                        // console.log(seriesOptions);
                     }
                     createChart();
                 }

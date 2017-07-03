@@ -22,11 +22,11 @@
 .button1 {
     background-color: white; 
     color: black; 
-    border: 2px solid #26a69a;
+    border: 2px solid #3583d6;
 }
 
 .button1:hover {
-    background-color: #26a69a;
+    background-color: #3583d6;
     color: white;
 }
 
@@ -34,11 +34,11 @@ p {
 	line-height: 2em;
 	margin-bottom: 20px;
 	font-size: 27px;
-	color: #26a69a;
+	color: #3583d6;
 }
 
 .select-style {
-    border: 2px solid #26a69a;
+    border: 2px solid #3583d6;
     border-radius: 3px;
     overflow: hidden;
     text-align: center;

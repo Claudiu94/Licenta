@@ -3,7 +3,7 @@
 }
 
 .owl-item {
-	background: #26a69a;
+	background: #36486b;
 	height: 220px;
 }
 .owl-item .item {
@@ -18,6 +18,10 @@
 
 a {
 	text-decoration: none;
+}
+
+.item a {
+	color: white;
 }
 
 .item a:hover {

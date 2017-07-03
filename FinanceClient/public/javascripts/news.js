@@ -17,7 +17,7 @@ $(document).ready(function(){
         	withCredentials: true
     	},
     	crossDomain:true,
-    	url: "https://www.google.com/finance/market_news"
+    	url: "/jsonfiles/Google Finance: Financial news.html"
 	}).done(function (data) {
 		var hrefs = $(data).find('.name');
 		cachedData = hrefs;

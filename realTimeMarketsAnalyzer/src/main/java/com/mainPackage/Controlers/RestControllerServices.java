@@ -99,19 +99,23 @@ public class RestControllerServices {
         List<Map<String, Object>> data = connectionToDB.getAlerts(id);
 
         for (Map<String, Object> map : data) {
-          String price = (String)map.get("Price");
-          int type = (Integer)map.get("Type");
-          String symbol = (String)map.get("Symbol");
-          float currentPrice = stocksBrief.retreivePriceForSymbol(symbol);
-          String company = stocksBrief.retreiveNameForSymbol(symbol);
+          int app = (Integer) map.get(("App"));
 
-          if (currentPrice != -1
-                  && ((type == 1 && Float.compare(Float.valueOf(price), currentPrice) == -1)
-                  || (type == -1 && Float.compare(Float.valueOf(price), currentPrice) == 1))) {
+          if (app == 1) {
+            String price = (String) map.get("Price");
+            int type = (Integer) map.get("Type");
+            String symbol = (String) map.get("Symbol");
+            float currentPrice = stocksBrief.retreivePriceForSymbol(symbol);
+            String company = stocksBrief.retreiveNameForSymbol(symbol);
 
-            String message = type == 1 ? "bigger" : "smaller";
+            if (currentPrice != -1
+                    && ((type == 1 && Float.compare(Float.valueOf(price), currentPrice) == -1)
+                    || (type == -1 && Float.compare(Float.valueOf(price), currentPrice) == 1))) {
 
-            alerts.add(new Alert(symbol, company, price, String.valueOf(currentPrice), message));
+              String message = type == 1 ? "bigger" : "smaller";
+
+              alerts.add(new Alert(symbol, company, price, String.valueOf(currentPrice), message));
+            }
           }
         }
       }

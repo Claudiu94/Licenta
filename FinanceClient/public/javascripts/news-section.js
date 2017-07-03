@@ -9,7 +9,7 @@ $(document).ready(function(){
         	withCredentials: true
     	},
     	crossDomain:true,
-    	url: "https://www.google.com/finance/market_news"
+    	url: "/jsonfiles/Google Finance: Financial news.html"
 	}).done(function (data) {
    		// console.log($(data).find('#news-main').html());
    		$('#content').html($(data).find('#news-main').html())
