@@ -54,9 +54,9 @@ public class NotificationCron {
                     sendMail(message, company, price, currency, String.valueOf(currentPrice));
 
                     if ((Integer)map.get("App") == 0)
-                        connectionToDB.deleteNotification(id, symbol);
+                        connectionToDB.deleteNotification(id, symbol, price, type);
                     else
-                        connectionToDB.emailSent(id, symbol);
+                        connectionToDB.emailSent(id, symbol, price, type);
                 }
             }
         }

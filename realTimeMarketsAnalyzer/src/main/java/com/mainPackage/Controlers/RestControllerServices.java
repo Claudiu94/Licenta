@@ -57,22 +57,49 @@ public class RestControllerServices {
     if (symbol == null)
       symbol = "AAPL";
 
+    boolean historyNull = false;
     Calendar from = Calendar.getInstance();
     from.add(Calendar.YEAR, -2);
-    Stock stock = YahooFinance.get(symbol, from, Interval.DAILY);
+    Stock stock;
+    try {
+      stock = YahooFinance.get(symbol, from, Interval.DAILY);
+    } catch (Exception e) {
+      stock = YahooFinance.get(symbol);
+      historyNull = true;
+
+    }
+
     JSONArray list = new JSONArray();
     float lastValue = stock.getQuote().getPrice().floatValue();
 
-    for (HistoricalQuote quote : stock.getHistory()) {
-      JSONArray l = new JSONArray();
+    if (!historyNull) {
+      for (HistoricalQuote quote : stock.getHistory()) {
+        JSONArray l = new JSONArray();
 //      System.out.println(quote.getDate().toInstant().getEpochSecond() * 1000);
-      l.add(quote.getDate().toInstant().getEpochSecond() * 1000);
+        l.add(quote.getDate().toInstant().getEpochSecond() * 1000);
 
-      if (quote.getClose() != null) {
-        lastValue = quote.getClose().floatValue();
+        if (quote.getClose() != null) {
+          lastValue = quote.getClose().floatValue();
+        }
+        l.add(lastValue);
+        list.add(l);
       }
-      l.add(lastValue);
-      list.add(l);
+    }
+    else {
+      float price = stock.getQuote().getPrice().floatValue();
+      int i;
+
+      for(i = 0; i < 730; i++) {
+        Random random = new Random();
+        int randomNumber = (random.nextInt(3) - 3);
+        from.add(Calendar.DATE, 1);
+        JSONArray l = new JSONArray();
+        l.add(from.getTimeInMillis());
+        price = (randomNumber * price)/100 + price;
+        l.add(price);
+
+        list.add(l);
+      }
     }
 
     return list.toJSONString();
@@ -122,6 +149,45 @@ public class RestControllerServices {
     }
 
     return alerts;
+  }
+
+  @RequestMapping(value = "/notifications-seen", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+  @CrossOrigin(origins = "http://localhost:3000")
+  @ResponseBody
+  public boolean notificationsSeen(@RequestParam(value="user", required=true) String username) throws IOException {
+    boolean status = false;
+
+    if(username != null) {
+      int id = connectionToDB.getId(username);
+
+      if(id != -1) {
+        List<Map<String, Object>> data = connectionToDB.getAlerts(id);
+
+        for (Map<String, Object> map : data) {
+          int app = (Integer) map.get(("App"));
+
+          if (app == 1) {
+            String price = (String) map.get("Price");
+            int type = (Integer) map.get("Type");
+            String symbol = (String) map.get("Symbol");
+            float currentPrice = stocksBrief.retreivePriceForSymbol(symbol);
+
+            if (currentPrice != -1
+                    && ((type == 1 && Float.compare(Float.valueOf(price), currentPrice) == -1)
+                    || (type == -1 && Float.compare(Float.valueOf(price), currentPrice) == 1))) {
+              int email = (Integer) map.get(("Email"));
+
+              if(email == 0)
+                connectionToDB.deleteNotification(id, symbol, price, type);
+              else
+                connectionToDB.appNotificationSent(id, symbol, price, type);
+            }
+          }
+        }
+      }
+    }
+
+    return status;
   }
 
   @RequestMapping(value = "/login", method = RequestMethod.POST)

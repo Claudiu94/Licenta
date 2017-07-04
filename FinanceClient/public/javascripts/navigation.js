@@ -1,5 +1,5 @@
 var url = 'http://localhost:8080/notifications?user=';
-var notifications;
+var url1 = 'http://localhost:8080/notifications-seen?user='
 
 $(document).ready(function(){
 	var url = window.location.href;
@@ -24,8 +24,10 @@ function checkNotifications() {
     	$.getJSON(finalUrl, function(data) {
     		notifications = data;
     		var nr = data.length;
-    		$(".fa-globe").append("<span class=\"num\">" + nr
-    			+ "</span>");
+
+    		if (nr > 0)
+    			$(".fa-globe").append("<span id=\"notification\" class=\"num\">" + nr
+    				+ "</span>");
     	})
     }
 }
@@ -33,14 +35,25 @@ function checkNotifications() {
 function showNotifications() {
 	var message = "";
 	
-	for(var i in notifications) {
-		var notification = notifications[i];
-		message = message + "Notification for "+ notification.company
-					+ "(" + notification.symbol
-					+ "). Price(" + notification.currentPrice
-					+ "$) is " + notification.message
-					+ " than $" + notification.price + "(current price).\n";
+	if(notifications.length > 0) {
+		for(var i in notifications) {
+			var notification = notifications[i];
+			message = message + "Notification for "+ notification.company
+						+ "(" + notification.symbol
+						+ "). Price(" + notification.currentPrice
+						+ "$) is " + notification.message
+						+ " than $" + notification.price + "(current price).\n";
+		}
+		$("#notification").remove();
+		alert(message);
+		notificationsSeen();
 	}
+}
 
-	alert(message);
+function notificationsSeen() {
+	var seenUrl = url1 + username.innerText;
+
+	$.getJSON(seenUrl, function(data) {
+		console.log(data);
+	});
 }

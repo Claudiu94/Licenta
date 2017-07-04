@@ -273,11 +273,13 @@ public class ConnectionToDB {
     }
 
 
-    public void deleteNotification(int userId, String symbol) {
+    public void deleteNotification(int userId, String symbol, String price, int type) {
         JdbcTemplate template = new JdbcTemplate(getDataSource());
         String sqlQuery = new StringBuilder().append("delete from Notifications where PersonId=")
                 .append(userId)
                 .append(" and Symbol=\"" + symbol + "\"")
+                .append(" and Price=\"" + price + "\"")
+                .append(" and Type=" + type)
                 .toString();
 
         template.execute(sqlQuery);
@@ -304,21 +306,25 @@ public class ConnectionToDB {
         return template.queryForList(sqlQuery);
     }
 
-    public void emailSent(int userId, String symbol) {
+    public void emailSent(int userId, String symbol, String price, int type) {
         JdbcTemplate template = new JdbcTemplate(getDataSource());
         String sqlQuery = new StringBuilder().append("update Notifications set Email=0 where PersonId=")
                 .append(userId)
                 .append(" and Symbol=\"" + symbol + "\"")
+                .append(" and Price=\"" + price + "\"")
+                .append(" and Type=" + type)
                 .toString();
 
         template.execute(sqlQuery);
     }
 
-    public void appNotificationSent(int userId, String symbol) {
+    public void appNotificationSent(int userId, String symbol, String price, int type) {
         JdbcTemplate template = new JdbcTemplate(getDataSource());
         String sqlQuery = new StringBuilder().append("update Notifications set App=0 where PersonId=")
                 .append(userId)
                 .append(" and Symbol=\"" + symbol + "\"")
+                .append(" and Price=\"" + price + "\"")
+                .append(" and Type=" + type)
                 .toString();
 
         template.execute(sqlQuery);
