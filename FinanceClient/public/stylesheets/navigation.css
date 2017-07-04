@@ -328,7 +328,15 @@ nav#mainnav li a {
 	position: relative;
 }
 
-.fa-globe .num {
+.fa-globe:before {
+	font-size: 20px;
+}
+
+.navbar a.fa-globe:hover {
+	color: #f2f2f2 !important;
+}
+
+/*.fa-globe .num {
     background-color: red;
     border-radius: 50%;
     display: block;
@@ -345,4 +353,29 @@ nav#mainnav li a {
     top: 5px;
     width: 12px;
     box-sizing: content-box;
+}*/
+
+.fa-globe .num:hover {
+	color: #fafafa;
+	background-color: #e60606;
+}
+
+.fa-globe .num {
+    background-color: red;
+    border-radius: 50%;
+    box-sizing: content-box;
+    cursor: pointer;
+    display: block;
+    font-family: Arial;
+    font-size: 11px;
+    font-weight: 600;
+    height: 10px;
+    left: 100%;
+    line-height: 1;
+    margin-left: -22px;
+    padding: 3px;
+    position: absolute;
+    text-align: center;
+    top: 6px;
+    width: 10px;
 }
