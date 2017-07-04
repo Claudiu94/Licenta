@@ -215,7 +215,7 @@ function populateTable(processedData) {
         var form = "<form method=\"post\" action=\"" + postLink
         + "\"><input type=\"text\" name=\"sharesNumber\" class=\"search-str\" value=\"\"/>"
         + "<input type=\"hidden\" name=\"symbol\" value=\"" + allData[i].name
-        + "\"><button type=\"submit\" name=\"type\" value=\"buy\">Buy</button>"
+        + "\"><button type=\"submit\" name=\"type\" value=\"buy\" disabled>Buy</button>"
         + "<button type=\"submit\" name=\"type\" value=\"sell\" disabled>Sell</button>"
         + "<input type=\"hidden\" name=\"portofolio\" value=\"" + $('.select-style').val()
         + "\"</input></form>"
@@ -238,6 +238,14 @@ function populateTable(processedData) {
         var existingShares = parseInt(parent.parent().parent().children()[4].firstChild.data, 10);
         var sellButton = parent.parent().children()[0][3];
         var moveButton = parent.parent().children()[1];
+        var buyButton = parent.parent().children()[0][2];
+
+        if (!Number.isNaN(nrShares) && nrShares > 0) {
+            $(buyButton).prop("disabled", false);
+        }
+        else {
+            $(buyButton).prop("disabled", true);
+        }
 
         if (!Number.isNaN(nrShares) && nrShares > 0 && existingShares >= nrShares) {
             $(sellButton).prop("disabled", false);
