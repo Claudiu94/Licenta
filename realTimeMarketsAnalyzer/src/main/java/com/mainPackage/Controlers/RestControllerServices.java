@@ -95,8 +95,7 @@ public class RestControllerServices {
         from.add(Calendar.DATE, 1);
         JSONArray l = new JSONArray();
         l.add(from.getTimeInMillis());
-        price = (randomNumber * price)/100 + price;
-        l.add(price);
+        l.add((randomNumber * price)/100 + price);
 
         list.add(l);
       }
