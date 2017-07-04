@@ -91,7 +91,7 @@ public class RestControllerServices {
 
       for(i = 0; i < 730; i++) {
         Random random = new Random();
-        int randomNumber = (random.nextInt(3) - 3);
+        int randomNumber = (random.nextInt(1) - 1);
         from.add(Calendar.DATE, 1);
         JSONArray l = new JSONArray();
         l.add(from.getTimeInMillis());
